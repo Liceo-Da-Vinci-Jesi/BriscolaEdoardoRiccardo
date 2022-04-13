@@ -1,6 +1,6 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting
+import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, Regole
 
 mazzo = classMazzo.Mazzo().mazzo
 class Game():
@@ -23,6 +23,7 @@ class Game():
         self.lobby.Show()
         
         self.Setting = Setting.SETTING()
+        self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
         self.Setting.Hide()
         self.COLORE = self.Setting.COLORE
         self.colore = self.Setting.colore
@@ -32,8 +33,14 @@ class Game():
         self.dimensione = self.Setting.dimensione
         self.Setting.dimensione.Bind(wx.EVT_COMBOBOX, self.getRes)
         
+        self.Rules = Regole.RULES()
+        self.Rules.Bind(wx.EVT_CLOSE, self.backLobby)
+        self.Rules.button.Bind(wx.EVT_BUTTON, self.backLobby)
+        self.Rules.Hide()
+        
         self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
+        self.lobby.b3.Bind(wx.EVT_BUTTON, self.openRules)
         
         self.tabellone = Tabellone.Tabellone()
         self.tabellone.Hide()
@@ -49,7 +56,10 @@ class Game():
         self.lobby.Enable(False)
         self.Setting.Show()
         return
-    
+    def openRules(self, evt):
+        self.lobby.Enable(False)
+        self.Rules.Show()
+        return
     def getRes(self, evt):
         dim = self.dimensione.GetStringSelection()
         self.DIMENSIONE = dim
@@ -60,7 +70,6 @@ class Game():
         elif self.DIMENSIONE == "960x540":
             self.tabellone.SetSize((960,540))
         return
-            
     def getColour(self,evt):
         colore = self.colore.GetStringSelection()
         self.COLORE = colore
@@ -68,15 +77,18 @@ class Game():
         self.Setting.panel.SetBackgroundColour(self.COLORE)
         self.tabellone.panel.SetBackgroundColour(self.COLORE)
         self.homeFinale.panel.SetBackgroundColour(self.COLORE)
+        self.Rules.SetBackgroundColour(self.COLORE)
         self.Setting.Refresh()
         self.lobby.Refresh()
         self.homeFinale.Refresh()
         return
     def backLobby(self, evt):
         self.Setting.Hide()
+        self.Rules.Hide()
         self.lobby.Enable(True)
         self.lobby.Raise()
         return
+
     def startGame(self):
         self.nome = self.lobby.nome.GetValue()
         while len(self.user) != 3:
@@ -233,7 +245,6 @@ class Game():
         self.tabellone.Enable(False)
         puntiUtente = self.contaPunti(self.contaUSER)
         puntiCpu = self.contaPunti(self.contaCPU)
-        self.tabellone.Close()
         self.homeFinale.Show()
         print(puntiUtente, puntiCpu)
         if puntiUtente > puntiCpu:
@@ -243,6 +254,8 @@ class Game():
         else:
             self.homeFinale.winner.SetLabel("None has won...")
         self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nPunti USER: " + str(puntiUtente))
+        self.tabellone.Hide()
+        
         return
     
     def PulisciCampo(self):
