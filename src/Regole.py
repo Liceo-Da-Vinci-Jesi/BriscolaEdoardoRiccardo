@@ -35,10 +35,6 @@ class RULES(wx.Frame):
 
     def openBrowser(self, evt):
         webbrowser.open("https://en.wikipedia.org/wiki/Briscola")
-#         dial = wx.MessageDialog(None, "Ora della merenda", "RULES", wx.OK)
-#         url = "https://en.wikipedia.org/wiki/Briscola"
-#         dial.ShowModal()
-#         x = wx.html2.WebView.LoadURL("https://en.wikipedia.org/wiki/Briscola")
         return
 # ----------------------------------------
 if __name__ == "__main__":
