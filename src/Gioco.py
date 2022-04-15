@@ -1,6 +1,6 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, Regole
+import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, webbrowser
 
 mazzo = classMazzo.Mazzo().mazzo
 class Game():
@@ -33,14 +33,9 @@ class Game():
         self.dimensione = self.Setting.dimensione
         self.Setting.dimensione.Bind(wx.EVT_COMBOBOX, self.getRes)
         
-        self.Rules = Regole.RULES()
-        self.Rules.Bind(wx.EVT_CLOSE, self.backLobby)
-        self.Rules.button.Bind(wx.EVT_BUTTON, self.backLobby)
-        self.Rules.Hide()
-        
         self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
-        self.lobby.b3.Bind(wx.EVT_BUTTON, self.openRules)
+        self.lobby.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
         
         self.tabellone = Tabellone.Tabellone()
         self.tabellone.Hide()
@@ -55,10 +50,6 @@ class Game():
     def openSetting(self, evt):
         self.lobby.Enable(False)
         self.Setting.Show()
-        return
-    def openRules(self, evt):
-        self.lobby.Enable(False)
-        self.Rules.Show()
         return
     def getRes(self, evt):
         dim = self.dimensione.GetStringSelection()
@@ -77,14 +68,15 @@ class Game():
         self.Setting.panel.SetBackgroundColour(self.COLORE)
         self.tabellone.panel.SetBackgroundColour(self.COLORE)
         self.homeFinale.panel.SetBackgroundColour(self.COLORE)
-        self.Rules.SetBackgroundColour(self.COLORE)
         self.Setting.Refresh()
         self.lobby.Refresh()
         self.homeFinale.Refresh()
         return
+    def openBrowser(self, evt):
+        webbrowser.open("https://en.wikipedia.org/wiki/Briscola")
+        return
     def backLobby(self, evt):
         self.Setting.Hide()
-        self.Rules.Hide()
         self.lobby.Enable(True)
         self.lobby.Raise()
         return
@@ -246,7 +238,6 @@ class Game():
         puntiUtente = self.contaPunti(self.contaUSER)
         puntiCpu = self.contaPunti(self.contaCPU)
         self.homeFinale.Show()
-        print(puntiUtente, puntiCpu)
         if puntiUtente > puntiCpu:
             self.homeFinale.winner.SetLabel("Congratulation! You are the winner!")
         elif puntiUtente < puntiCpu:
