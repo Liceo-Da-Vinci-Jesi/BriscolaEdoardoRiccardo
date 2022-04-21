@@ -106,7 +106,7 @@ class Game():
         
         #Imposto la Briscola e il mazzo nel tabellone
         self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
-        img = Image.open("carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
+        img = Image.open("../carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -116,7 +116,7 @@ class Game():
         #Imposto la mano dell'User
         #Carta 1
         self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
-        img = Image.open("carte/" + self.user[0][1] + str(self.user[0][0]) + ".jpg")
+        img = Image.open("../carte/" + self.user[0][1] + str(self.user[0][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -125,7 +125,7 @@ class Game():
         
         #Carta 2
         self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
-        img = Image.open("carte/" + self.user[1][1] + str(self.user[1][0]) + ".jpg")
+        img = Image.open("../carte/" + self.user[1][1] + str(self.user[1][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -134,7 +134,7 @@ class Game():
         
         #Carta 3
         self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
-        img = Image.open("carte/" + self.user[2][1] + str(self.user[2][0]) + ".jpg")
+        img = Image.open("../carte/" + self.user[2][1] + str(self.user[2][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -144,7 +144,7 @@ class Game():
         self.tabellone.Refresh()
         
         #carta coperta (mano CPU)
-        img = Image.open("carte/Retro2.jpg")
+        img = Image.open("../carte/Retro2.jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -190,7 +190,7 @@ class Game():
                     self.turno = True
                     self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
                     
-                    img = Image.open("carte/" + cartaCPU[1] + str(cartaCPU[0]) + ".jpg")
+                    img = Image.open("../carte/" + cartaCPU[1] + str(cartaCPU[0]) + ".jpg")
                     img = img.resize((150,250))
                     img2 = img.copy()
                     wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -265,7 +265,7 @@ class Game():
                         cartaU = u
                         
             #carta pescata dall'utente
-            img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
+            img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
             img = img.resize((150,250))
             img2 = img.copy()
             wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -314,7 +314,7 @@ class Game():
                 self.tabellone.S4.Hide()
 
                 #carta pescata dall'utente
-                img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
+                img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
                 img = img.resize((150,250))
                 img2 = img.copy()
                 wx_Image = wx.Image(img2.size[0], img2.size[1])
