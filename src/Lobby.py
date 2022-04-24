@@ -1,4 +1,4 @@
-import wx
+import wx, webbrowser
 
 class Home(wx.Frame):
 
@@ -35,7 +35,7 @@ class Home(wx.Frame):
         self.b2.Enable(False)
         self.b3 = wx.Button(self.panel, label="RULES", size=(50,50))
         
-        self.b3.Bind(wx.EVT_BUTTON, self.Regole)
+        self.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
         
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -54,7 +54,8 @@ class Home(wx.Frame):
             self.b2.Enable(False)
         return
     
-    def Regole(self, evt):
+    def openBrowser(self, evt):
+        webbrowser.open("https://en.wikipedia.org/wiki/Briscola")
         return
 
 

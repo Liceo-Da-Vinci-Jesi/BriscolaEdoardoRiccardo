@@ -7,7 +7,7 @@ class Tabellone(wx.Frame):
         self.panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
         
-        img = Image.open("carte/Retro2.jpg")
+        img = Image.open("../carte/Retro1.jpg")
         img = img.resize((150,250))
         
         wx_Image = wx.Image(img.size[0], img.size[1])
@@ -15,7 +15,7 @@ class Tabellone(wx.Frame):
 
         bitmap = wx.Bitmap(wx_Image)
         
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "CPU's HAND")
         self.C1 = wx.BitmapButton(self.panel, bitmap=bitmap, id=1, name = "")
         self.C2 = wx.BitmapButton(self.panel, bitmap=bitmap, id=2, name = "")
         self.C3 = wx.BitmapButton(self.panel, bitmap=bitmap, id=3, name = "")
@@ -38,17 +38,18 @@ class Tabellone(wx.Frame):
         self.S4 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "BRISCOLA")
         self.S5 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "MAZZO")
         
-        
-#         self.S4.Enable(False)
-        self.S5.Enable(False)
-        grid.Add(self.S4, proportion=1, flag=wx.ALL, border=5)
+        h1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "BRISCOLA")
+        h1.Add(self.S4, proportion=1, flag=wx.ALL, border=5)
+        h2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK")
+        h2.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(h1, proportion=1, flag=wx.ALL, border=5)
         grid.Add(self.S1, proportion=1, flag=wx.ALL, border=5)
         grid.Add(h, proportion=1, flag=wx.ALL, border=5)
         grid.Add(self.S2, proportion=1, flag=wx.ALL, border=5)
-        grid.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(h2, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(grid, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "YOUR HAND")
         self.U1 = wx.BitmapButton(self.panel, bitmap=bitmap, id=4, name = "USER")
         self.U2 = wx.BitmapButton(self.panel, bitmap=bitmap, id=5, name = "USER")
         self.U3 = wx.BitmapButton(self.panel, bitmap=bitmap, id=6, name = "USER")
@@ -60,6 +61,7 @@ class Tabellone(wx.Frame):
         
         
         self.SetMinSize((960, 875))
+        self.Move((350,50))
         self.panel.SetSizer(vbox)
         vbox.Fit(self)
         return

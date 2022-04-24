@@ -20,9 +20,9 @@ class SETTING(wx.Frame):
         vbox.Add(hbox,proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         
         st2 = wx.StaticText(self.panel, label="Resolution:")
-        dim = ["FULLSCREEN", "1200x780", "960x540"]
+        dim = ["FULLSCREEN", "1200x950", "950x950"]
         self.dimensione = wx.ComboBox(self.panel, choices = dim, style = wx.CB_READONLY)
-        self.DIMENSIONE = "400x250"
+        self.DIMENSIONE = "960x875"
         
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox2.Add(st2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -42,27 +42,35 @@ class SETTING(wx.Frame):
         vbox.Add(hbox3,proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        st4 = wx.StaticText(self.panel, label = "Retro Carte: Yu-Gi-Oh!")
-        self.retro = "Yu-Gi-Oh!"
+        self.st4 = wx.StaticText(self.panel, label = "Back of cards: Piacentine")
+        self.retro = "Piacentine"
         
-        img = Image.open("carte/Retro1.jpg")
+        self.BackType = {"Piacentine":"../carte/Retro1.jpg", "Yu-Gi-Oh":"../carte/Retro2.jpg"}
+        
+        img = Image.open("../carte/Retro1.jpg")
         img = img.resize((30,50))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
-        self.bRetro1 = wx.BitmapButton(self.panel, bitmap = bitmap)
+        bRetro1 = wx.BitmapButton(self.panel, bitmap = bitmap, id=1)
         
-        img = Image.open("carte/Retro2.jpg")
+        img = Image.open("../carte/Retro2.jpg")
         img = img.resize((30,50))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
-        self.bRetro2 = wx.BitmapButton(self.panel, bitmap = bitmap)
+        bRetro2 = wx.BitmapButton(self.panel, bitmap = bitmap, id=2)
         
-        hbox4.Add(st4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
-        hbox4.Add(self.bRetro1, proportion=0, flag=wx.ALL, border=5)
-        hbox4.Add(self.bRetro2, proportion=0, flag=wx.ALL, border=5)
-        vbox.Add(hbox4, proportion=1, flag=wx.ALL, border=5)
+        hbox4.Add(self.st4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
+        hbox4.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.ALL, border=5)
+        hbox4.Add(bRetro1, proportion=0, flag=wx.ALL, border=5)
+        hbox4.Add(bRetro2, proportion=0, flag=wx.ALL, border=5)
+        hbox4.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.ALL, border=5)
+        vbox.Add(hbox4, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        
+        bRetro1.Bind(wx.EVT_BUTTON, self.getBackType)
+        bRetro2.Bind(wx.EVT_BUTTON, self.getBackType)
+        
         
         self.tornaIndietro = wx.Button(self.panel, label = "Back to the lobby")
 
@@ -76,6 +84,13 @@ class SETTING(wx.Frame):
         self.Centre()
         self.Move((400,150))
 
+    def getBackType(self, evt):
+        if evt.GetId() == 1:
+            self.retro = "Piacentine"
+            self.st4.SetLabel("Back of cards: Piacentine")
+        else:
+            self.retro = "Yu-Gi-Oh"
+            self.st4.SetLabel("Back of cards: Yu-Gi-Oh!")
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
