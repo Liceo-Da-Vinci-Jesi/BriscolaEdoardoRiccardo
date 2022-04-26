@@ -1,6 +1,6 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting
+import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, finestraMazzi
 from PIL import Image
 
 
@@ -11,11 +11,17 @@ class Game():
         #Mani
         self.user = []
         self.cpu = []
+        
         self.vincitoreTurno = ""
+        
+        #Carte
         self.cUser = ""
         self.cCPU = ""
+        
+        #Mazzi
         self.contaUSER = []
         self.contaCPU = []
+        
         self.CONTA = 0
         self.turno = random.choice((True, False))
         print(self.turno)
@@ -23,8 +29,6 @@ class Game():
         self.briscolaSeme = self.briscolaCarta[1]
         self.lobby = Lobby.Home()
         self.lobby.Show()
-        self.x = "NO"
-        self.y = "NO"
         
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
@@ -183,7 +187,7 @@ class Game():
         return 
     
     def GiocataCPU(self):
-        time.sleep(1)
+        #time.sleep(1)
         if not self.turno:
             cartaCPU = random.choice(self.cpu)
             for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
@@ -226,16 +230,16 @@ class Game():
 #         self.tabellone.S3.SetLabel("DESCRIZIONE TURNO: \nCarta CPU: " + str(self.cCPU[0]) + " " + self.cCPU[1] + "\nCarta User: " + str(self.cUser[0]) + " " +
 #                                    self.cUser[1] + "\nVincitore Turno: " + vincitoreTurno + "\nCarte Mazzo: " + str(carteRimaste))
         if vincitoreTurno == self.nome:
-            self.contaUSER.append(self.cUser[0])
-            self.contaUSER.append(self.cCPU[0])
+            self.contaUSER.append([self.cUser[0], self.cUser[1]])
+            self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
             self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
         else:
-            self.contaCPU.append(self.cCPU[0])
-            self.contaCPU.append(self.cUser[0])
+            self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
+            self.contaCPU.append([self.cUser[0], self.cUser[1]])
             self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
         self.PulisciCampo()
         self.pescaCarta()
-        time.sleep(2)
+        #time.sleep(1)
         self.tabellone.S1.Hide()
         self.tabellone.S2.Hide()
         if self.vincitoreTurno != self.nome and self.CONTA < 4:
@@ -283,7 +287,6 @@ class Game():
             #carta pescata dalla cpu
             cartaC.Show()
             cartaC.Bitmap = self.retro
-        #Se le carta del mazzo sono finite, non pesco più
         else:
             self.CONTA += 1
             if self.CONTA == 4:
@@ -331,7 +334,7 @@ class Game():
     
     def Results(self):
         self.tabellone.S3.SetLabel("THE GAME IS OVER!\nCalculating scores...")
-        self.tabellone.Enable(False)
+        self.tabellone.Hide()
         puntiUtente = self.contaPunti(self.contaUSER)
         puntiCpu = self.contaPunti(self.contaCPU)
         self.homeFinale.Show()
@@ -341,9 +344,15 @@ class Game():
             self.homeFinale.winner.SetLabel("CPU is the winner of the match! Try again ;)")
         else:
             self.homeFinale.winner.SetLabel("None has won...")
-        self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nPunti USER: " + str(puntiUtente))
+        self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nPunti " + self.nome+": " + str(puntiUtente))
         self.tabellone.Hide()
-        
+        self.homeFinale.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
+        return
+    
+    def openMazzi(self, evt):
+        finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome)
+        finestra.Show()
+        #print("MAZZO USER: ", self.contaUSER, " | Mazzo CPU: ", self.contaCPU)
         return
     
     def PulisciCampo(self):
@@ -403,7 +412,7 @@ class Game():
         lista = l
         somma = 0
         for n in lista:
-            somma += Punti[n]
+            somma += Punti[n[0]]
         return somma
     
     def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)

@@ -5,11 +5,7 @@ class Tabellone(wx.Frame):
    def __init__(self):
         super().__init__(None, title="BRISCOLA | GAME")
         self.panel = wx.Panel(self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
-        
-#         bmp = wx.Bitmap("../carte/Tavolo.jpg")
-#         self.sfondo = wx.StaticBitmap(self.panel, bitmap = bmp)
-        
+        vbox = wx.BoxSizer(wx.VERTICAL)        
         
         img = Image.open("../carte/Retro1.jpg")
         img = img.resize((150,250))
@@ -74,8 +70,12 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U1, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U2, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
-        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
         
+        #(BUG)
+#         bmp = wx.Bitmap("../carte/Tavolo.jpg")
+#         self.sfondo = wx.StaticBitmap(self.panel, bitmap = bmp)
+          
         self.SetMinSize((960, 875))
         self.Move((350,50))
         self.panel.SetSizer(vbox)

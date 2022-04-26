@@ -28,11 +28,13 @@ class Home(wx.Frame):
         
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        self.b1 = wx.Button(self.panel, label="CLOSE", size=(50,50))
+        self.b1 = wx.Button(self.panel, label="MAZZI", size=(50,50))
+        self.b3 = wx.Button(self.panel, label="CLOSE", size=(50,50))
         
-        self.b1.Bind(wx.EVT_BUTTON, self.Chiudi)
+        self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)
         
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
         
         
