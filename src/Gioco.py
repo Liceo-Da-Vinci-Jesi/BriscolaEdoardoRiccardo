@@ -23,6 +23,8 @@ class Game():
         self.briscolaSeme = self.briscolaCarta[1]
         self.lobby = Lobby.Home()
         self.lobby.Show()
+        self.x = "NO"
+        self.y = "NO"
         
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
@@ -171,8 +173,8 @@ class Game():
                     n.SetLabel("")
                     n.Hide()
                     self.user.remove(cartaScelta)
-                    
                     self.cUser = cartaScelta
+
         self.turno = False
         if self.GiocataCompleta():
             self.fineTurno()
@@ -181,6 +183,7 @@ class Game():
         return 
     
     def GiocataCPU(self):
+        time.sleep(1)
         if not self.turno:
             cartaCPU = random.choice(self.cpu)
             for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
@@ -198,7 +201,6 @@ class Game():
                     
                     n.SetLabel("")
                     n.Hide()
-                    self.tabellone.Update()
                     self.cpu.remove(cartaCPU)
                     self.cCPU = cartaCPU
         if not self.GiocataCompleta():
@@ -209,29 +211,31 @@ class Game():
     def GiocataCompleta(self):
         if self.tabellone.S1.GetLabel() != "" and self.tabellone.S2.GetLabel() != "":
             return True
+        self.tabellone.Update()
         return False
     
     def fineTurno(self):
         if self.tabellone.S1.GetLabel() == "" or self.tabellone.S2.GetLabel() == "":
             return
         vincitoreTurno = self.Played(self.cUser,self.cCPU)
-        carteRimaste = len(mazzo)
-        if len(mazzo) - 2 > 0:
-            carteRimaste = len(mazzo) - 2
-        else:
-            carteRimaste = 0
-        self.tabellone.S3.SetLabel("DESCRIZIONE TURNO: \nCarta CPU: " + str(self.cCPU[0]) + " " + self.cCPU[1] + "\nCarta User: " + str(self.cUser[0]) + " " +
-                                   self.cUser[1] + "\nVincitore Turno: " + vincitoreTurno + "\nCarte Mazzo: " + str(carteRimaste))
+#         carteRimaste = len(mazzo)
+#         if len(mazzo) - 2 > 0:
+#             carteRimaste = len(mazzo) - 2
+#         else:
+#             carteRimaste = 0
+#         self.tabellone.S3.SetLabel("DESCRIZIONE TURNO: \nCarta CPU: " + str(self.cCPU[0]) + " " + self.cCPU[1] + "\nCarta User: " + str(self.cUser[0]) + " " +
+#                                    self.cUser[1] + "\nVincitore Turno: " + vincitoreTurno + "\nCarte Mazzo: " + str(carteRimaste))
         if vincitoreTurno == self.nome:
             self.contaUSER.append(self.cUser[0])
             self.contaUSER.append(self.cCPU[0])
+            self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
         else:
             self.contaCPU.append(self.cCPU[0])
             self.contaCPU.append(self.cUser[0])
-        self.tabellone.S5.SetName("MAZZO\nCarte Rimanenti: " + str(len(mazzo)))
+            self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
         self.PulisciCampo()
         self.pescaCarta()
-        time.sleep(1)
+        time.sleep(2)
         self.tabellone.S1.Hide()
         self.tabellone.S2.Hide()
         if self.vincitoreTurno != self.nome and self.CONTA < 4:
