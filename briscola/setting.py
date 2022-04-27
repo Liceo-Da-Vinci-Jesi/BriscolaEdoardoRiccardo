@@ -45,16 +45,16 @@ class SETTING(wx.Frame):
         self.st4 = wx.StaticText(self.panel, label = "Back of cards: Piacentine")
         self.retro = "Piacentine"
         
-        self.BackType = {"Piacentine":"../carte/Retro1.jpg", "Yu-Gi-Oh":"../carte/Retro2.jpg"}
+        self.BackType = {"Piacentine":"carte/Retro1.jpg", "Yu-Gi-Oh":"carte/Retro2.jpg"}
         
-        img = Image.open("../carte/Retro1.jpg")
+        img = Image.open("carte/Retro1.jpg")
         img = img.resize((30,50))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
         bRetro1 = wx.BitmapButton(self.panel, bitmap = bitmap, id=1)
         
-        img = Image.open("../carte/Retro2.jpg")
+        img = Image.open("carte/Retro2.jpg")
         img = img.resize((30,50))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())

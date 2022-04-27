@@ -7,7 +7,7 @@ class Tabellone(wx.Frame):
         self.panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)        
         
-        img = Image.open("../carte/Retro1.jpg")
+        img = Image.open("carte/Retro1.jpg")
         img = img.resize((150,250))
         
         wx_Image = wx.Image(img.size[0], img.size[1])

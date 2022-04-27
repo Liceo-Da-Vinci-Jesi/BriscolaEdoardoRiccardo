@@ -21,7 +21,7 @@ class Home(wx.Frame):
         conta = -1
         for carta in utente:
             conta += 1
-            front = "../carte/" + carta[1] + str(carta[0]) + ".jpg"
+            front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
             img = Image.open(front)
             img = img.resize((50,100))
             wx_Image = wx.Image(img.size[0], img.size[1])
@@ -56,7 +56,7 @@ class Home(wx.Frame):
         conta = -1
         for carta in cpu:
             conta += 1
-            front = "../carte/" + carta[1] + str(carta[0]) + ".jpg"
+            front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
             img = Image.open(front)
             img = img.resize((50,100))
             wx_Image = wx.Image(img.size[0], img.size[1])

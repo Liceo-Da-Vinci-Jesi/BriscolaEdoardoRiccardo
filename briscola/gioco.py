@@ -4,13 +4,14 @@ import wx
 import random,time
 from PIL import Image
 
-import mazzo, tabellone, lobby, risultati, setting, finestraMazzi
+from briscola import mazzo, tabellone, lobby, risultati, setting, finestraMazzi
 
 
-mazzo = mazzo.Mazzo().mazzo
+mazzoCarte = mazzo.Mazzo().mazzo
+
 class Game():
     def __init__(self):
-        random.shuffle(mazzo)
+        random.shuffle(mazzoCarte)
         #Mani
         self.user = []
         self.cpu = []
@@ -92,14 +93,14 @@ class Game():
         self.nome = self.lobby.nome.GetValue()
         while len(self.user) != 3:
             if self.turno:
-                carta = mazzo.pop()
+                carta = mazzoCarte.pop()
                 self.user.append(carta)
-                carta = mazzo.pop()
+                carta = mazzoCarte.pop()
                 self.cpu.append(carta)
             else:
-                carta = mazzo.pop() 
+                carta = mazzoCarte.pop() 
                 self.cpu.append(carta)
-                carta = mazzo.pop()
+                carta = mazzoCarte.pop()
                 self.user.append(carta)  
         
         #Imposto la mano della CPU
@@ -109,7 +110,7 @@ class Game():
         
         #Imposto la Briscola e il mazzo nel tabellone
         self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
-        img = Image.open("../carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
+        img = Image.open("carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -120,7 +121,7 @@ class Game():
         #Imposto la mano dell'User
         #Carta 1
         self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
-        img = Image.open("../carte/" + self.user[0][1] + str(self.user[0][0]) + ".jpg")
+        img = Image.open("carte/" + self.user[0][1] + str(self.user[0][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -129,7 +130,7 @@ class Game():
         
         #Carta 2
         self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
-        img = Image.open("../carte/" + self.user[1][1] + str(self.user[1][0]) + ".jpg")
+        img = Image.open("carte/" + self.user[1][1] + str(self.user[1][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -138,7 +139,7 @@ class Game():
         
         #Carta 3
         self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
-        img = Image.open("../carte/" + self.user[2][1] + str(self.user[2][0]) + ".jpg")
+        img = Image.open("carte/" + self.user[2][1] + str(self.user[2][0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -160,7 +161,7 @@ class Game():
         return
     
     def choiceBriscola(self):
-        briscola = mazzo.pop()
+        briscola = mazzoCarte.pop()
         return briscola
     
     def GiocataUSER(self, evt):
@@ -198,7 +199,7 @@ class Game():
                     self.turno = True
                     self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
                     
-                    img = Image.open("../carte/" + cartaCPU[1] + str(cartaCPU[0]) + ".jpg")
+                    img = Image.open("carte/" + cartaCPU[1] + str(cartaCPU[0]) + ".jpg")
                     img = img.resize((150,250))
                     img2 = img.copy()
                     wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -250,28 +251,28 @@ class Game():
         return
     
     def pescaCarta(self):
-        if len(mazzo) > 1:
+        if len(mazzoCarte) > 1:
             if self.vincitoreTurno == self.nome:
-                carta = mazzo.pop()
+                carta = mazzoCarte.pop()
                 self.user.append(carta)
                 for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                     if u.GetLabel() == "":
                         u.SetLabel(str(carta[0]) + carta[1])
                         cartaU = u
-                carta2 = mazzo.pop()
+                carta2 = mazzoCarte.pop()
                 self.cpu.append(carta2)
                 for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                     if c.GetLabel() == "":
                         c.SetLabel(str(carta2[0]) + carta2[1])
                         cartaC = c
             else:
-                carta2 = mazzo.pop()
+                carta2 = mazzoCarte.pop()
                 self.cpu.append(carta2)
                 for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                     if c.GetLabel() == "":
                         c.SetLabel(str(carta2[0]) + carta2[1])
                         cartaC = c
-                carta = mazzo.pop()
+                carta = mazzoCarte.pop()
                 self.user.append(carta)
                 for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                     if u.GetLabel() == "":
@@ -279,7 +280,7 @@ class Game():
                         cartaU = u
                         
             #carta pescata dall'utente
-            img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
+            img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
             img = img.resize((150,250))
             img2 = img.copy()
             wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -297,7 +298,7 @@ class Game():
                 return
             if self.CONTA == 1:
                 if self.vincitoreTurno == self.nome:
-                    carta = mazzo.pop()
+                    carta = mazzoCarte.pop()
                     self.user.append(carta)
                     for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                         if u.GetLabel() == "":
@@ -310,7 +311,7 @@ class Game():
                             c.SetLabel(str(carta2[0]) + carta2[1])
                             cartaC = c
                 else:
-                    carta2 = mazzo.pop()
+                    carta2 = mazzoCarte.pop()
                     self.cpu.append(carta2)
                     for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                         if c.GetLabel() == "":
