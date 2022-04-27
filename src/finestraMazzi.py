@@ -79,16 +79,15 @@ class Home(wx.Frame):
         
         
         
-        flex.Add(name, proportion=1, flag=wx.ALL, border=5)
+        flex.Add(name, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         flex.Add(vbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        flex.Add(CPU, proportion=1, flag=wx.ALL, border=5)
+        flex.Add(CPU, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         flex.Add(vbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         flex.AddGrowableCol(1)
         
         self.panel.SetSizer(flex)
-        self.SetMinSize((900,900))
-        self.SetMaxSize((900,900))
+        flex.Fit(self)
         self.Centre()
 
 # ----------------------------------------
