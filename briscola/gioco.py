@@ -1,10 +1,13 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, finestraMazzi
+import wx
+import random,time
 from PIL import Image
 
+import mazzo, tabellone, lobby, risultati, setting, finestraMazzi
 
-mazzo = classMazzo.Mazzo().mazzo
+
+mazzo = mazzo.Mazzo().mazzo
 class Game():
     def __init__(self):
         random.shuffle(mazzo)
@@ -27,10 +30,10 @@ class Game():
         print(self.turno)
         self.briscolaCarta = self.choiceBriscola()
         self.briscolaSeme = self.briscolaCarta[1]
-        self.lobby = Lobby.Home()
+        self.lobby = lobby.Home()
         self.lobby.Show()
         
-        self.Setting = Setting.SETTING()
+        self.Setting = setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
         self.Setting.Hide()
         self.COLORE = self.Setting.COLORE
@@ -44,13 +47,13 @@ class Game():
         self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
         
-        self.tabellone = Tabellone.Tabellone()
+        self.tabellone = tabellone.Tabellone()
         self.tabellone.Hide()
         self.tabellone.U1.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         self.tabellone.U2.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         self.tabellone.U3.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         
-        self.homeFinale = Risultati.Home()
+        self.homeFinale = risultati.Home()
         self.homeFinale.Hide()
         return
     

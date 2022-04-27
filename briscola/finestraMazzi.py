@@ -1,5 +1,6 @@
 import wx
 from PIL import Image
+
 class Home(wx.Frame):
 
     def __init__(self, utente, cpu, nome):
@@ -96,6 +97,6 @@ if __name__ == "__main__":
 #     nome = "..."
 #     utente = [[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],]
 #     cpu = [[4, "Spadi"],[7, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"]]
-    window = Home()
+    window = Home("Gino","Pino","Pinguino")
     window.Show()
     app.MainLoop()
