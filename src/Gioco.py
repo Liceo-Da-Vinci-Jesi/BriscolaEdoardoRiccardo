@@ -28,6 +28,7 @@ class Game():
         #Mazzi
         self.contaUSER = []
         self.contaCPU = []
+        self.Punti = [0, 11, 0, 10, 0, 0, 0, 0, 2, 3, 4]
         
         self.CONTA = 0
         self.turno = random.choice((True, False))
@@ -405,11 +406,10 @@ class Game():
             return self.vincitoreTurno
         
     def contaPunti(self, l):
-        Punti = [0, 11, 0, 10, 0, 0, 0, 0, 2, 3, 4]
         lista = l
         somma = 0
         for n in lista:
-            somma += Punti[n[0]]
+            somma += self.Punti[n[0]]
         return somma
     
     def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)
