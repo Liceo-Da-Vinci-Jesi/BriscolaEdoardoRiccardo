@@ -419,7 +419,21 @@ class Game():
         if not self.turno:
             self.timerCPU.StartOnce(2000)
         return
-
+    
+    def GiocataLOW(self):
+        if self.semiCPU.count(self.briscolaSeme) != 3:
+            for c in self.importanza:
+                for x in self.cpu:
+                    if x[1]!=self.briscolaSeme and x[0]==c:
+                        return x
+        else:
+            numeri = [self.cpu[0][0], self.cpu[1][0], self.cpu[2][0]]
+            if 1 in numeri:
+                numeri.remove(1)
+            if 3 in numeri:
+                numeri.remove(3)
+            x = min(numeri)
+            return [x, self.briscolaSeme]
 if __name__ == "__main__":
     app = wx.App()
     a = Game()

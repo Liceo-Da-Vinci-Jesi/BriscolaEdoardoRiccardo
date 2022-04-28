@@ -52,6 +52,11 @@ class Home(wx.Frame):
             self.b2.Enable(True)
         else:
             self.b2.Enable(False)
+        if len(self.nome.GetValue()) >=7:
+            stringa = ""
+            for x in range(7):
+                stringa += x
+            self.nome.SetValue(x)
         return
     
     def openBrowser(self, evt):
