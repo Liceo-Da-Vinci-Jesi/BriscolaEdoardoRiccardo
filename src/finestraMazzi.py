@@ -93,9 +93,9 @@ class Home(wx.Frame):
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
-#     nome = "..."
-#     utente = [[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],]
-#     cpu = [[4, "Spadi"],[7, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"]]
+    #nome = "PROVA"
+    #utente = [[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],]
+    #cpu = [[4, "Spadi"],[7, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"]]
     window = Home()
     window.Show()
     app.MainLoop()

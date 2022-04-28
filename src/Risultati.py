@@ -28,7 +28,7 @@ class Home(wx.Frame):
         
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        self.b1 = wx.Button(self.panel, label="MAZZI", size=(50,50))
+        self.b1 = wx.Button(self.panel, label="PRESE", size=(50,50))
         self.b3 = wx.Button(self.panel, label="CLOSE", size=(50,50))
         
         self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)

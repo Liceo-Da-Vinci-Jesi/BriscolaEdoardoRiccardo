@@ -4,16 +4,23 @@ import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, fines
 from PIL import Image
 
 
-mazzo = classMazzo.Mazzo().mazzo
+
 class Game():
     def __init__(self):
-        random.shuffle(mazzo)
+        self.mazzo = classMazzo.Mazzo().mazzo
+        random.shuffle(self.mazzo)
+        self.countTurno = 0
+        self.timerCPU = wx.Timer()
+        self.timerCPU.Bind(wx.EVT_TIMER, self.GiocataCPU)
+        
+        self.timerAttesa = wx.Timer()
+        self.timerAttesa.Bind(wx.EVT_TIMER, self.fineTurno)
+        
         #Mani
         self.user = []
         self.cpu = []
         
         self.vincitoreTurno = ""
-        
         #Carte
         self.cUser = ""
         self.cCPU = ""
@@ -89,14 +96,14 @@ class Game():
         self.nome = self.lobby.nome.GetValue()
         while len(self.user) != 3:
             if self.turno:
-                carta = mazzo.pop()
+                carta = self.mazzo.pop()
                 self.user.append(carta)
-                carta = mazzo.pop()
+                carta = self.mazzo.pop()
                 self.cpu.append(carta)
             else:
-                carta = mazzo.pop() 
+                carta = self.mazzo.pop() 
                 self.cpu.append(carta)
-                carta = mazzo.pop()
+                carta = self.mazzo.pop()
                 self.user.append(carta)  
         
         #Imposto la mano della CPU
@@ -104,7 +111,7 @@ class Game():
         self.tabellone.C2.SetLabel(str(self.cpu[1][0]) + self.cpu[1][1])
         self.tabellone.C3.SetLabel(str(self.cpu[2][0]) + self.cpu[2][1])
         
-        #Imposto la Briscola e il mazzo nel tabellone
+        #Imposto la Briscola e il self.mazzo nel tabellone
         self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
         img = Image.open("../carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
         img = img.resize((150,250))
@@ -157,7 +164,7 @@ class Game():
         return
     
     def choiceBriscola(self):
-        briscola = mazzo.pop()
+        briscola = self.mazzo.pop()
         return briscola
     
     def GiocataUSER(self, evt):
@@ -181,13 +188,12 @@ class Game():
 
         self.turno = False
         if self.GiocataCompleta():
-            self.fineTurno()
+            self.timerAttesa.StartOnce(2000)
             return
-        self.GiocataCPU()
+        self.timerCPU.StartOnce(2000)
         return 
     
-    def GiocataCPU(self):
-        #time.sleep(1)
+    def GiocataCPU(self, evt):
         if not self.turno:
             cartaCPU = random.choice(self.cpu)
             for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
@@ -207,68 +213,60 @@ class Game():
                     n.Hide()
                     self.cpu.remove(cartaCPU)
                     self.cCPU = cartaCPU
-        if not self.GiocataCompleta():
+        if self.GiocataCompleta():
+            self.timerAttesa.StartOnce(2000)
             return
-        self.fineTurno()
         return
    
     def GiocataCompleta(self):
         if self.tabellone.S1.GetLabel() != "" and self.tabellone.S2.GetLabel() != "":
+            self.countTurno += 1
             return True
-        self.tabellone.Update()
         return False
     
-    def fineTurno(self):
-        if self.tabellone.S1.GetLabel() == "" or self.tabellone.S2.GetLabel() == "":
-            return
-        vincitoreTurno = self.Played(self.cUser,self.cCPU)
-#         carteRimaste = len(mazzo)
-#         if len(mazzo) - 2 > 0:
-#             carteRimaste = len(mazzo) - 2
-#         else:
-#             carteRimaste = 0
-#         self.tabellone.S3.SetLabel("DESCRIZIONE TURNO: \nCarta CPU: " + str(self.cCPU[0]) + " " + self.cCPU[1] + "\nCarta User: " + str(self.cUser[0]) + " " +
-#                                    self.cUser[1] + "\nVincitore Turno: " + vincitoreTurno + "\nCarte Mazzo: " + str(carteRimaste))
-        if vincitoreTurno == self.nome:
-            self.contaUSER.append([self.cUser[0], self.cUser[1]])
-            self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
-            self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
-        else:
-            self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
-            self.contaCPU.append([self.cUser[0], self.cUser[1]])
-            self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
-        self.PulisciCampo()
-        self.pescaCarta()
-        #time.sleep(1)
-        self.tabellone.S1.Hide()
-        self.tabellone.S2.Hide()
-        if self.vincitoreTurno != self.nome and self.CONTA < 4:
-            self.GiocataCPU()
+    def fineTurno(self, evt):
+        if self.countTurno != 0:
+            vincitoreTurno = self.Played(self.cUser,self.cCPU)
+            if vincitoreTurno == self.nome:
+                self.contaUSER.append([self.cUser[0], self.cUser[1]])
+                self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
+                self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
+            else:
+                self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
+                self.contaCPU.append([self.cUser[0], self.cUser[1]])
+                self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
+            self.tabellone.turnWinner.SetLabel("Prende: " + vincitoreTurno)
+            self.PulisciCampo()
+            self.pescaCarta()
+            self.tabellone.S1.Hide()
+            self.tabellone.S2.Hide()
+            if self.vincitoreTurno != self.nome and self.CONTA < 4:
+                self.timerCPU.StartOnce(2000)
         return
     
     def pescaCarta(self):
-        if len(mazzo) > 1:
+        if len(self.mazzo) > 1:
             if self.vincitoreTurno == self.nome:
-                carta = mazzo.pop()
+                carta = self.mazzo.pop()
                 self.user.append(carta)
                 for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                     if u.GetLabel() == "":
                         u.SetLabel(str(carta[0]) + carta[1])
                         cartaU = u
-                carta2 = mazzo.pop()
+                carta2 = self.mazzo.pop()
                 self.cpu.append(carta2)
                 for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                     if c.GetLabel() == "":
                         c.SetLabel(str(carta2[0]) + carta2[1])
                         cartaC = c
             else:
-                carta2 = mazzo.pop()
+                carta2 = self.mazzo.pop()
                 self.cpu.append(carta2)
                 for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                     if c.GetLabel() == "":
                         c.SetLabel(str(carta2[0]) + carta2[1])
                         cartaC = c
-                carta = mazzo.pop()
+                carta = self.mazzo.pop()
                 self.user.append(carta)
                 for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                     if u.GetLabel() == "":
@@ -294,7 +292,7 @@ class Game():
                 return
             if self.CONTA == 1:
                 if self.vincitoreTurno == self.nome:
-                    carta = mazzo.pop()
+                    carta = self.mazzo.pop()
                     self.user.append(carta)
                     for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
                         if u.GetLabel() == "":
@@ -307,7 +305,7 @@ class Game():
                             c.SetLabel(str(carta2[0]) + carta2[1])
                             cartaC = c
                 else:
-                    carta2 = mazzo.pop()
+                    carta2 = self.mazzo.pop()
                     self.cpu.append(carta2)
                     for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
                         if c.GetLabel() == "":
@@ -352,7 +350,6 @@ class Game():
     def openMazzi(self, evt):
         finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome)
         finestra.Show()
-        #print("MAZZO USER: ", self.contaUSER, " | Mazzo CPU: ", self.contaCPU)
         return
     
     def PulisciCampo(self):
@@ -420,7 +417,7 @@ class Game():
         self.startGame()
         self.tabellone.Show()
         if not self.turno:
-            self.GiocataCPU()
+            self.timerCPU.StartOnce(2000)
         return
 
 if __name__ == "__main__":

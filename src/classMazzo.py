@@ -12,7 +12,6 @@ class Mazzo:
         semi = ("Bastoni", "Coppe", "Denari", "Spadi")
         for seme in semi:
             for numero in numeri:
-                #False indica se la carta è coperta (False) o se scoperta (True)
                 mazzo.append([numero, seme]) 
         #random.shuffle(mazzo)
         return mazzo

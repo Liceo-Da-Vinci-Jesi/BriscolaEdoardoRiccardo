@@ -6,6 +6,9 @@ class Tabellone(wx.Frame):
         super().__init__(None, title="BRISCOLA | GAME")
         self.panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)        
+                #(BUG)
+        #bmp = wx.Bitmap("../carte/Tavolo.jpg")
+        #self.sfondo = wx.StaticBitmap(self.panel, bitmap = bmp)
         
         img = Image.open("../carte/Retro1.jpg")
         img = img.resize((150,250))
@@ -48,6 +51,9 @@ class Tabellone(wx.Frame):
         self.Count2.SetBackgroundColour("white")
         
         h.Add(self.Count1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        self.turnWinner = wx.StaticText(self.panel, label="")
+        self.turnWinner.SetFont(font)
+        h.Add(self.turnWinner, proportion=1, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         h.Add(self.Count2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         self.S4 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "BRISCOLA")
         self.S5 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "MAZZO")
@@ -72,9 +78,6 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
         
-        #(BUG)
-#         bmp = wx.Bitmap("../carte/Tavolo.jpg")
-#         self.sfondo = wx.StaticBitmap(self.panel, bitmap = bmp)
           
         self.SetMinSize((960, 875))
         self.Move((350,50))
