@@ -8,6 +8,8 @@ class Home(wx.Frame):
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         flex = wx.FlexGridSizer(rows = 2, cols = 2, vgap=5, hgap=5)
         name = wx.TextCtrl(self.panel, style=wx.TE_READONLY, size=(150,300))
+        name.SetBackgroundColour("white")
+        name.SetForegroundColour("black")
         name.SetValue(nome)
         name.SetFont(font)
         name.Enable(False)
@@ -43,6 +45,8 @@ class Home(wx.Frame):
         vbox.Add(h6, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         CPU = wx.TextCtrl(self.panel, style=wx.TE_READONLY, size=(150,300))
+        CPU.SetBackgroundColour("white")
+        CPU.SetForegroundColour("black")
         CPU.SetValue("CPU")
         CPU.SetFont(font)
         CPU.Enable(False)
@@ -77,7 +81,7 @@ class Home(wx.Frame):
         vbox2.Add(h7, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox2.Add(h8, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        
+        self.SetBackgroundColour("black")
         
         flex.Add(name, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         flex.Add(vbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)

@@ -7,7 +7,7 @@ class SETTING(wx.Frame):
         self.panel = wx.Panel(self)
         box = wx.BoxSizer(wx.VERTICAL)
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
-        
+
         st1 = wx.StaticText(self.panel, label="Background Colour:")
         colori = ["red", "green", "white", "yellow", "blue"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
@@ -31,7 +31,7 @@ class SETTING(wx.Frame):
         
         st3 = wx.StaticText(self.panel, label="Difficulty:")
         self.random = wx.RadioButton(self.panel, label="Random", style=wx.RB_GROUP)
-        self.normal = wx.RadioButton(self.panel, label="Normal")
+        self.normal = wx.RadioButton(self.panel, label="Hard")
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
         hbox3.Add(st3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL , border=5)
@@ -71,8 +71,12 @@ class SETTING(wx.Frame):
         bRetro1.Bind(wx.EVT_BUTTON, self.getBackType)
         bRetro2.Bind(wx.EVT_BUTTON, self.getBackType)
         
-        
-        self.tornaIndietro = wx.Button(self.panel, label = "Back to the lobby")
+        img = Image.open("../carte/goback.png")
+        img = img.resize((75,50))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        self.tornaIndietro = wx.BitmapButton(self.panel, bitmap = bitmap)
 
         vbox.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.EXPAND)
         vbox.Add(self.tornaIndietro, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)

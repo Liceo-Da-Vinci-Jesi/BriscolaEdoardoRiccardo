@@ -1,4 +1,5 @@
 import wx, webbrowser
+from PIL import Image
 
 class Home(wx.Frame):
 
@@ -9,31 +10,50 @@ class Home(wx.Frame):
         font = wx.Font(35,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         vbox  = wx.BoxSizer(wx.VERTICAL)
         staticText = wx.StaticText(self.panel, label = "WELCOME!")
+        staticText.SetForegroundColour("red")
         staticText.SetFont(font)
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(staticText, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
 
-        st2 = wx.StaticText(self.panel, label = "DIFFICULTY SELECTED: EASY")
+        self.st2 = wx.StaticText(self.panel, label = "DIFFICULTY SELECTED: RANDOM")
         font2 = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
-        st2.SetFont(font2)
+        self.st2.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox2.Add(st2, proportion=1, flag=wx.ALL, border=0)
+        hbox2.Add(self.st2, proportion=1, flag=wx.ALL, border=0)
         vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         st3 = wx.StaticText(self.panel, label="Username:")
-        self.nome = wx.TextCtrl(self.panel)
+        self.nome = wx.TextCtrl(self.panel, style = wx.TE_PROCESS_ENTER)
         hbox4.Add(st3, proportion=1, flag=wx.ALL, border=5)
         hbox4.Add(self.nome, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         self.nome.Bind(wx.EVT_TEXT, self.pulsanteStart)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        self.b1 = wx.Button(self.panel, label="SETTINGS", size=(50,50))
-        self.b2 = wx.Button(self.panel, label="START", size=(50,50))
+        img = Image.open("../carte/settingIcon.png")
+        img = img.resize((100,40))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        self.b1 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
+        self.b1.SetBackgroundColour("white")
+        
+        img = Image.open("../carte/startIcon.png")
+        img = img.resize((116,50))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        self.b2 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
         self.b2.Enable(False)
-        self.b3 = wx.Button(self.panel, label="RULES", size=(50,50))
+        
+        img = Image.open("../carte/RulesIcon.png")
+        img = img.resize((60,45))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        self.b3 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
         
         self.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
         
@@ -52,11 +72,12 @@ class Home(wx.Frame):
             self.b2.Enable(True)
         else:
             self.b2.Enable(False)
+        return
         if len(self.nome.GetValue()) >=7:
             stringa = ""
             for x in range(7):
-                stringa += x
-            self.nome.SetValue(x)
+                stringa += self.nome.GetValue()[x]
+            self.nome.SetValue(stringa)
         return
     
     def openBrowser(self, evt):

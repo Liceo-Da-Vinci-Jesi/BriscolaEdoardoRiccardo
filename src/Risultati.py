@@ -14,16 +14,21 @@ class Home(wx.Frame):
         hbox.Add(staticText, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
 
-        self.winner = wx.StaticText(self.panel, label = "")
+        self.winner = wx.StaticText(self.panel, label = "Calculating scores, please wait")
         font2 = wx.Font(12,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.winner.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox2.Add(self.winner, proportion=1, flag=wx.ALL, border=0)
-        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
+        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        self.risultati = wx.StaticText(self.panel, label="")
-        hbox4.Add(self.risultati, proportion=1, flag=wx.ALL, border=5)
+        self.risultati = wx.StaticText(self.panel, label="PUNTI CPU:\nI TUOI PUNTI:")
+        hbox4.Add(self.risultati, proportion=1, flag=wx.ALL , border=5)
+        
+        vbox5 = wx.BoxSizer(wx.VERTICAL)
+        self.barra = wx.Gauge(self.panel, range=50)
+        vbox5.Add(self.barra, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox4.Add(vbox5, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox4, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         
@@ -46,7 +51,6 @@ class Home(wx.Frame):
     def Chiudi(self, evt):
         self.Close()
         return
-
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()

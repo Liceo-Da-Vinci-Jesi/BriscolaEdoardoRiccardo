@@ -1,10 +1,7 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, time, Setting, finestraMazzi
+import random, classMazzo, Tabellone, wx, Lobby, Risultati, Setting, finestraMazzi
 from PIL import Image
-
-
-
 class Game():
     def __init__(self):
         self.mazzo = classMazzo.Mazzo().mazzo
@@ -29,6 +26,7 @@ class Game():
         self.contaUSER = []
         self.contaCPU = []
         self.Punti = [0, 11, 0, 10, 0, 0, 0, 0, 2, 3, 4]
+        self.importanza = [2,4,5,6,7,8,9,10,3,1]
         
         self.CONTA = 0
         self.turno = random.choice((True, False))
@@ -37,6 +35,7 @@ class Game():
         self.briscolaSeme = self.briscolaCarta[1]
         self.lobby = Lobby.Home()
         self.lobby.Show()
+        self.lobby.nome.Bind(wx.EVT_TEXT_ENTER, self.Start)
         
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
@@ -48,9 +47,11 @@ class Game():
         self.DIMENSIONE = self.Setting.DIMENSIONE
         self.dimensione = self.Setting.dimensione
         self.Setting.dimensione.Bind(wx.EVT_COMBOBOX, self.getRes)
-        
         self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
+        self.Setting.random.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
+        self.Setting.normal.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
+        self.difficulty = True #random
         
         self.tabellone = Tabellone.Tabellone()
         self.tabellone.Hide()
@@ -60,6 +61,11 @@ class Game():
         
         self.homeFinale = Risultati.Home()
         self.homeFinale.Hide()
+        self.contaBarra = 0
+        self.barra = self.homeFinale.barra
+        self.timerBarra = wx.Timer()
+        self.timerBarra.Bind(wx.EVT_TIMER, self.OnTimer)
+        self.checkGauge = True
         return
     
     def openSetting(self, evt):
@@ -86,6 +92,16 @@ class Game():
         self.Setting.Refresh()
         self.lobby.Refresh()
         self.homeFinale.Refresh()
+        return
+    def getDifficulty(self, evt):
+        self.lobby.Enable(True)
+        if self.Setting.random.GetValue():
+            self.difficulty = True
+            self.lobby.st2.SetLabel("DIFFICULTY SELECTED: RANDOM")
+        else:
+            self.difficulty = False
+            self.lobby.st2.SetLabel("DIFFICULTY SELECTED: HARD")
+        self.lobby.Enable(False)
         return
     def backLobby(self, evt):
         self.Setting.Hide()
@@ -189,16 +205,108 @@ class Game():
 
         self.turno = False
         if self.GiocataCompleta():
-            self.timerAttesa.StartOnce(2000)
+            self.timerAttesa.StartOnce(1000)
             return
-        self.timerCPU.StartOnce(2000)
-        return 
+        self.timerCPU.StartOnce(1000)
+        return
     
+    def GiocataLOW(self):
+        if self.semiCPU.count(self.briscolaSeme) != len(self.cpu):
+            for c in self.importanza:
+                for x in self.cpu:
+                    if x[1]!=self.briscolaSeme and x[0]==c:
+                        return x
+        else:
+            numeri = []
+            for x in self.cpu:
+                numeri.append(x[0])
+            if 1 in numeri and len(numeri) != 1:
+                numeri.remove(1)
+            if 3 in numeri and len(numeri) != 1:
+                numeri.remove(3)
+            x = min(numeri)
+            return [x, self.briscolaSeme]
     def GiocataCPU(self, evt):
+        #print(self.cpu)
         if not self.turno:
-            cartaCPU = random.choice(self.cpu)
+            if self.difficulty:
+                cartaCPU = random.choice(self.cpu)
+            else:
+                self.semiCPU = []
+                for x in self.cpu:
+                    self.semiCPU.append(x[1])
+                if self.vincitoreTurno == "":
+                    cartaCPU = self.GiocataLOW()
+                elif self.vincitoreTurno == "CPU":
+                    cartaCPU = self.GiocataLOW()
+                else:
+                    #Ha giocato l'utente
+                    #Se gioca briscola
+                    if self.cUser[1] == self.briscolaSeme:
+                        #print("a")
+                        #Se la CPU non ha briscola gioca + basso poss
+                        if self.briscolaSeme not in self.semiCPU:
+                            cartaCPU = self.GiocataLOW()
+                            #print("b")
+                        #Se invece la ha 
+                        else:
+                            #e se è > di un 9 prova a prenderla, altrimenti gioca + basso poss
+                            if self.importanza.index(self.cUser[0]) > 5:
+                                carteMaggiori = []
+                                for carta in self.cpu:
+                                    if carta[1] == self.briscolaSeme and self.importanza.index(carta[0]) > self.importanza.index(self.cUser[0]):
+                                        carteMaggiori.append(carta)
+                                if len(carteMaggiori) == 0:
+                                    cartaCPU = self.GiocataLOW()
+                                    #print("c")
+                                else:
+                                    lista = []
+                                    for carta in carteMaggiori:
+                                        lista.append(self.importanza.index(carta[0]))
+                                    x = max(lista)
+                                    cartaCPU = [self.importanza[x], self.briscolaSeme]
+                                    #print("d")
+                            else:
+                                cartaCPU = self.GiocataLOW()
+                                #print("e")
+                    elif self.importanza.index(self.cUser[0]) > 6 and self.briscolaSeme in self.semiCPU:
+                        briscole = []
+                        for carta in self.cpu:
+                            if carta[1] == self.briscolaSeme:
+                                briscole.append(self.importanza.index(carta[0]))
+                        if len(briscole) > 0:
+                            x = max(briscole)
+                            cartaCPU = [self.importanza[x], self.briscolaSeme]
+                            #print("f")
+                        else:
+                            cartaCPU = self.GiocataLOW()
+                            #print("g")
+                    #se l'user gioca una carta e la cpu ha il suo stesso seme e vale di più la prende
+                    elif self.cUser[1] in self.semiCPU:
+                        lista = []
+                        for carta in self.cpu:
+                                if carta[1] == self.cUser[1]:
+                                    if self.importanza.index(carta[0]) > self.importanza.index(self.cUser[0]):
+                                        lista.append(carta)
+                        #se la CPU non può prendere la carta dell'utente, gioca il + basso poss
+                        if len(lista) == 0:
+                            cartaCPU = self.GiocataLOW()
+                            #print("h")
+                        else:
+                            maggiori = []
+                            for carta in lista:
+                                maggiori.append(self.importanza.index(carta[0]))
+                            x = min(maggiori)
+                            cartaCPU = [self.importanza[x], self.cUser[1]]
+                            #print("i")
+                    else:
+                        cartaCPU = self.GiocataLOW()
+                        #print("l")
+            if self.cCPU == cartaCPU:
+                cartaCPU = random.choice(self.cpu)
             for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                if n.GetLabel() == (str(cartaCPU[0]) + cartaCPU[1]):
+                label = str(cartaCPU[0]) + cartaCPU[1]
+                if n.GetLabel() == label:
                     self.turno = True
                     self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
                     
@@ -215,7 +323,7 @@ class Game():
                     self.cpu.remove(cartaCPU)
                     self.cCPU = cartaCPU
         if self.GiocataCompleta():
-            self.timerAttesa.StartOnce(2000)
+            self.timerAttesa.StartOnce(1000)
             return
         return
    
@@ -242,7 +350,7 @@ class Game():
             self.tabellone.S1.Hide()
             self.tabellone.S2.Hide()
             if self.vincitoreTurno != self.nome and self.CONTA < 4:
-                self.timerCPU.StartOnce(2000)
+                self.timerCPU.StartOnce(1000)
         return
     
     def pescaCarta(self):
@@ -332,20 +440,29 @@ class Game():
         return
     
     def Results(self):
-        self.tabellone.S3.SetLabel("THE GAME IS OVER!\nCalculating scores...")
         self.tabellone.Hide()
-        puntiUtente = self.contaPunti(self.contaUSER)
-        puntiCpu = self.contaPunti(self.contaCPU)
         self.homeFinale.Show()
-        if puntiUtente > puntiCpu:
-            self.homeFinale.winner.SetLabel("Congratulations! You are the winner!")
-        elif puntiUtente < puntiCpu:
-            self.homeFinale.winner.SetLabel("CPU is the winner of the match! Try again ;)")
+        self.timerBarra.Start(1)
+        return
+    def OnTimer(self, event):
+        if self.checkGauge:
+            self.contaBarra += 1
+            self.barra.SetValue(self.contaBarra)
+            if self.barra.GetValue() == (self.barra.GetRange() + 50):
+                self.barra.Destroy()
+                self.checkGauge = False
         else:
-            self.homeFinale.winner.SetLabel("None has won...")
-        self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nPunti " + self.nome+": " + str(puntiUtente))
-        self.tabellone.Hide()
-        self.homeFinale.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
+            self.timerBarra.Stop()
+            puntiUtente = self.contaPunti(self.contaUSER)
+            puntiCpu = self.contaPunti(self.contaCPU)
+            if puntiUtente > puntiCpu:
+                self.homeFinale.winner.SetLabel("Congratulations! You are the winner!")
+            elif puntiUtente < puntiCpu:
+                self.homeFinale.winner.SetLabel("CPU is the winner! Try again ;)")
+            else:
+                self.homeFinale.winner.SetLabel("None has won...")
+            self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nI tuoi Punti" + ": " + str(puntiUtente))
+            self.homeFinale.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
         return
     
     def openMazzi(self, evt):
@@ -417,23 +534,14 @@ class Game():
         self.startGame()
         self.tabellone.Show()
         if not self.turno:
-            self.timerCPU.StartOnce(2000)
+            self.timerCPU.StartOnce(1000)
         return
     
-    def GiocataLOW(self):
-        if self.semiCPU.count(self.briscolaSeme) != 3:
-            for c in self.importanza:
-                for x in self.cpu:
-                    if x[1]!=self.briscolaSeme and x[0]==c:
-                        return x
-        else:
-            numeri = [self.cpu[0][0], self.cpu[1][0], self.cpu[2][0]]
-            if 1 in numeri:
-                numeri.remove(1)
-            if 3 in numeri:
-                numeri.remove(3)
-            x = min(numeri)
-            return [x, self.briscolaSeme]
+#fix risoluzioni
+#sfondo
+#icone
+#colorazioni
+#descrizione turno 
 if __name__ == "__main__":
     app = wx.App()
     a = Game()
