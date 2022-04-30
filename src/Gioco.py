@@ -2,7 +2,7 @@
 #Briscola
 import random, classMazzo, Tabellone, wx, Lobby, Risultati, Setting, finestraMazzi
 from PIL import Image
-class Game():
+class Game:
     def __init__(self):
         self.mazzo = classMazzo.Mazzo().mazzo
         random.shuffle(self.mazzo)
@@ -65,7 +65,8 @@ class Game():
         self.barra = self.homeFinale.barra
         self.timerBarra = wx.Timer()
         self.timerBarra.Bind(wx.EVT_TIMER, self.OnTimer)
-        self.checkGauge = True
+        self.checkGauge = True #è attiva
+        self.homeFinale.b2.Bind(wx.EVT_BUTTON, self.Restart)
         return
     
     def openSetting(self, evt):
@@ -77,10 +78,12 @@ class Game():
         self.DIMENSIONE = dim
         if self.DIMENSIONE == "FULLSCREEN":
             self.tabellone.Maximize()
-        elif self.DIMENSIONE == "1200x950":
-            self.tabellone.SetSize((1200, 950))
-        elif self.DIMENSIONE == "950x950":
-            self.tabellone.SetSize((950,950))
+        elif self.DIMENSIONE == "1300x1000":
+            self.tabellone.SetMinSize((1300, 1000))
+            self.tabellone.SetMaxSize((1300, 1000))
+        elif self.DIMENSIONE == "1000x1000":
+            self.tabellone.SetMinSize((1000,1000))
+            self.tabellone.SetMaxSize((1000,1000))
         return
     def getColour(self,evt):
         colore = self.colore.GetStringSelection()
@@ -200,7 +203,7 @@ class Game():
                     
                     n.SetLabel("")
                     n.Hide()
-                    self.tabellone.cartaUTENTE.SetLabel("CARTA GIOCATA: " + str(cartaScelta[0]) + " " + cartaScelta[1])
+                    self.tabellone.cartaUTENTE.SetLabel(str(cartaScelta[0]) + " " + cartaScelta[1])
                     self.user.remove(cartaScelta)
                     self.cUser = cartaScelta
 
@@ -321,7 +324,7 @@ class Game():
                     
                     n.SetLabel("")
                     n.Hide()
-                    self.tabellone.cartaCPU.SetLabel("CARTA CPU: " + str(cartaCPU[0]) + " " + cartaCPU[1] + "     |")
+                    self.tabellone.cartaCPU.SetLabel(str(cartaCPU[0]) + " " + cartaCPU[1])
                     self.cpu.remove(cartaCPU)
                     self.cCPU = cartaCPU
         if self.GiocataCompleta():
@@ -350,9 +353,9 @@ class Game():
                 carteMazzo = len(self.mazzo) - 2
             else:
                 carteMazzo = 0
-            self.tabellone.carteMazzo.SetLabel("CARTE MAZZO: " + str(carteMazzo) + "     |     ")
-            print(len(self.mazzo))
-            self.tabellone.turnWinner.SetLabel("Prende: " + vincitoreTurno)
+            self.tabellone.carteMazzo.SetLabel(str(carteMazzo))
+            self.tabellone.turnWinner.SetLabel("TAKES: " + vincitoreTurno)
+            self.tabellone.Update()
             self.PulisciCampo()
             self.pescaCarta()
             self.tabellone.S1.Hide()
@@ -469,7 +472,7 @@ class Game():
                 self.homeFinale.winner.SetLabel("CPU is the winner! Try again ;)")
             else:
                 self.homeFinale.winner.SetLabel("None has won...")
-            self.homeFinale.risultati.SetLabel("Punti CPU: " + str(puntiCpu) + "\nI tuoi Punti" + ": " + str(puntiUtente))
+            self.homeFinale.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
             self.homeFinale.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
         return
     
@@ -545,11 +548,18 @@ class Game():
             self.timerCPU.StartOnce(1000)
         return
     
-#fix risoluzioni
+    def Restart(self, evt):
+        self.homeFinale.Destroy()
+        self.__init__()
+        return
+#fix risoluzioni: fatto
 #sfondo
 #icone
 #colorazioni
-#descrizione turno 
+#descrizione turno: fatto
+#fix nome (max 7 caratteri): fatto
+#Restart: fatto
+#giocataCPU in altro file
 if __name__ == "__main__":
     app = wx.App()
     a = Game()

@@ -22,30 +22,35 @@ class Home(wx.Frame):
         vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        self.risultati = wx.StaticText(self.panel, label="PUNTI CPU:\nI TUOI PUNTI:")
-        hbox4.Add(self.risultati, proportion=1, flag=wx.ALL , border=5)
+        v = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "SCORE")
+        self.risultati = wx.StaticText(self.panel, label="CPU:\nYOU:")
+        v.Add(self.risultati, proportion=1, flag=wx.ALL, border=5)
+        
         
         vbox5 = wx.BoxSizer(wx.VERTICAL)
         self.barra = wx.Gauge(self.panel, range=50)
-        vbox5.Add(self.barra, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        hbox4.Add(vbox5, proportion=1, flag=wx.ALL, border=5)
+        vbox5.Add(self.barra, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        hbox4.Add(v, proportion=0, flag=wx.ALL , border=5)
+        hbox4.Add(vbox5, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         vbox.Add(hbox4, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        self.b1 = wx.Button(self.panel, label="PRESE", size=(50,50))
+        self.b1 = wx.Button(self.panel, label="TAKEN", size=(50,50))
+        self.b2 = wx.Button(self.panel, label="RESTART", size=(50,50))
         self.b3 = wx.Button(self.panel, label="CLOSE", size=(50,50))
         
         self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)
         
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
         
         
         self.panel.SetSizer(vbox)
-        self.SetMinSize((400,250))
-        self.SetMaxSize((400,250))
+        self.SetMinSize((400,300))
+        self.SetMaxSize((400,300))
         self.Centre()
         
     def Chiudi(self, evt):

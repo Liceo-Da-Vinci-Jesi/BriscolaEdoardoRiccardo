@@ -25,11 +25,12 @@ class Home(wx.Frame):
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         st3 = wx.StaticText(self.panel, label="Username:")
-        self.nome = wx.TextCtrl(self.panel, style = wx.TE_PROCESS_ENTER)
+        self.nome = wx.TextCtrl(self.panel, style = wx.TE_PROCESS_ENTER | wx.TE_CENTRE)
         hbox4.Add(st3, proportion=1, flag=wx.ALL, border=5)
         hbox4.Add(self.nome, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         self.nome.Bind(wx.EVT_TEXT, self.pulsanteStart)
+        self.nome.SetMaxLength(8)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
         img = Image.open("../carte/settingIcon.png")
@@ -66,18 +67,12 @@ class Home(wx.Frame):
         self.SetMaxSize((400,250))
         self.panel.SetSizer(vbox)
         self.Centre()
-    
+        
     def pulsanteStart(self, evt):
         if self.nome.GetValue() != "":
             self.b2.Enable(True)
         else:
             self.b2.Enable(False)
-        return
-        if len(self.nome.GetValue()) >=7:
-            stringa = ""
-            for x in range(7):
-                stringa += self.nome.GetValue()[x]
-            self.nome.SetValue(stringa)
         return
     
     def openBrowser(self, evt):

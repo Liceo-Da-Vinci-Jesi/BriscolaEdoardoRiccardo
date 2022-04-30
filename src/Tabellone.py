@@ -14,34 +14,43 @@ class Tabellone(wx.Frame):
         
         img = Image.open("../carte/Retro1.jpg")
         img = img.resize((150,250))
-        
+
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
 
         bitmap = wx.Bitmap(wx_Image)
+        
         #Descrizione Turno
         h = wx.BoxSizer(wx.HORIZONTAL)
-        self.cartaCPU = wx.StaticText(self.panel, label="CARTA CPU: ...   |")
-        self.cartaUTENTE = wx.StaticText(self.panel, label="   CARTA GIOCATA:")
-        self.carteMazzo = wx.StaticText(self.panel, label=" CARTE MAZZO: ...   |")
+        v1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "CARD CPU")
+        v2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK's CARDS")
+        v3 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "CARD PLAYED")
+        self.cartaCPU = wx.StaticText(self.panel, label="10 BASTONI")
+        self.cartaUTENTE = wx.StaticText(self.panel, label="10 BASTONI")
+        self.carteMazzo = wx.StaticText(self.panel, label="33")
         font = wx.Font(12,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         for x in (self.cartaCPU,self.cartaUTENTE,self.carteMazzo):
             x.SetFont(font)
-            x.SetForegroundColour("dark green")
-        h.Add(self.cartaCPU, proportion=1, flag=wx.ALL, border=5)
-        h.Add(self.carteMazzo, proportion=1, flag=wx.ALL, border=5)
-        h.Add(self.cartaUTENTE, proportion=1, flag=wx.ALL, border=5)
-        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+            x.SetForegroundColour("dark grey")
+        v1.Add(self.cartaCPU, proportion=1, flag=wx.ALL, border=0)
+        v2.Add(self.carteMazzo, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
+        v3.Add(self.cartaUTENTE, proportion=1, flag=wx.ALL, border=0)
+        for x in (v1, v2, v3):
+            h.Add(x, proportion=1, flag=wx.ALL, border=5)
+        self.cartaCPU.SetLabel("")
+        self.cartaUTENTE.SetLabel("")
+        vbox.Add(h, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
+        #Mano CPU
         hbox = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "CPU's HAND")
         
         self.C1 = wx.BitmapButton(self.panel, bitmap=bitmap, id=1, name = "")
         self.C2 = wx.BitmapButton(self.panel, bitmap=bitmap, id=2, name = "")
         self.C3 = wx.BitmapButton(self.panel, bitmap=bitmap, id=3, name = "")
-        hbox.Add(self.C1, proportion=1, flag=wx.ALL, border=5)
-        hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=5)
-        hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=5)
-        vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox.Add(self.C1, proportion=1, flag=wx.ALL, border=0)
+        hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=0)
+        hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=0)
+        vbox.Add(hbox, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         grid = wx.GridSizer(rows=1, cols=5, vgap=5, hgap=5)
         #S = linea centrale: 5 colonne (1° carta CPU, 2° carta User, 3° vuoto, 4° Briscola, 5° Mazzo)
@@ -75,13 +84,13 @@ class Tabellone(wx.Frame):
         
         h1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "BRISCOLA")
         h1.Add(self.S4, proportion=1, flag=wx.ALL, border=5)
-        self.h2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK")
-        self.h2.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
-        grid.Add(h1, proportion=1, flag=wx.ALL, border=5)
+        h2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK")
+        h2.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(h1, proportion=0, flag=wx.ALL, border=5)
         grid.Add(self.S1, proportion=1, flag=wx.ALL, border=5)
         grid.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         grid.Add(self.S2, proportion=1, flag=wx.ALL, border=5)
-        grid.Add(self.h2, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(h2, proportion=0, flag=wx.ALL, border=5)
         vbox.Add(grid, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         hbox2 = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "YOUR HAND")
@@ -91,7 +100,7 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U1, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U2, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
-        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
+        vbox.Add(hbox2, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
           
         self.SetMinSize((960, 875))
         self.Move((350,50))
