@@ -200,6 +200,7 @@ class Game():
                     
                     n.SetLabel("")
                     n.Hide()
+                    self.tabellone.cartaUTENTE.SetLabel("CARTA GIOCATA: " + str(cartaScelta[0]) + " " + cartaScelta[1])
                     self.user.remove(cartaScelta)
                     self.cUser = cartaScelta
 
@@ -320,6 +321,7 @@ class Game():
                     
                     n.SetLabel("")
                     n.Hide()
+                    self.tabellone.cartaCPU.SetLabel("CARTA CPU: " + str(cartaCPU[0]) + " " + cartaCPU[1] + "     |")
                     self.cpu.remove(cartaCPU)
                     self.cCPU = cartaCPU
         if self.GiocataCompleta():
@@ -344,6 +346,12 @@ class Game():
                 self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
                 self.contaCPU.append([self.cUser[0], self.cUser[1]])
                 self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
+            if len(self.mazzo) - 2 > 0:
+                carteMazzo = len(self.mazzo) - 2
+            else:
+                carteMazzo = 0
+            self.tabellone.carteMazzo.SetLabel("CARTE MAZZO: " + str(carteMazzo) + "     |     ")
+            print(len(self.mazzo))
             self.tabellone.turnWinner.SetLabel("Prende: " + vincitoreTurno)
             self.PulisciCampo()
             self.pescaCarta()

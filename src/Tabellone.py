@@ -19,6 +19,19 @@ class Tabellone(wx.Frame):
         wx_Image.SetData(img.convert("RGB").tobytes())
 
         bitmap = wx.Bitmap(wx_Image)
+        #Descrizione Turno
+        h = wx.BoxSizer(wx.HORIZONTAL)
+        self.cartaCPU = wx.StaticText(self.panel, label="CARTA CPU: ...   |")
+        self.cartaUTENTE = wx.StaticText(self.panel, label="   CARTA GIOCATA:")
+        self.carteMazzo = wx.StaticText(self.panel, label=" CARTE MAZZO: ...   |")
+        font = wx.Font(12,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        for x in (self.cartaCPU,self.cartaUTENTE,self.carteMazzo):
+            x.SetFont(font)
+            x.SetForegroundColour("dark green")
+        h.Add(self.cartaCPU, proportion=1, flag=wx.ALL, border=5)
+        h.Add(self.carteMazzo, proportion=1, flag=wx.ALL, border=5)
+        h.Add(self.cartaUTENTE, proportion=1, flag=wx.ALL, border=5)
+        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         hbox = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "CPU's HAND")
         
