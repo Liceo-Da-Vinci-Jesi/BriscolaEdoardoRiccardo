@@ -17,6 +17,7 @@ class Home(wx.Frame):
         vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
 
         self.st2 = wx.StaticText(self.panel, label = "DIFFICULTY SELECTED: RANDOM")
+        self.st2.SetForegroundColour("white")
         font2 = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.st2.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -25,6 +26,7 @@ class Home(wx.Frame):
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         st3 = wx.StaticText(self.panel, label="Username:")
+        st3.SetForegroundColour("white")
         self.nome = wx.TextCtrl(self.panel, style = wx.TE_PROCESS_ENTER | wx.TE_CENTRE)
         hbox4.Add(st3, proportion=1, flag=wx.ALL, border=5)
         hbox4.Add(self.nome, proportion=1, flag=wx.ALL, border=5)
@@ -62,7 +64,7 @@ class Home(wx.Frame):
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
-        
+        self.SetBackgroundColour("dark grey")
         self.SetMinSize((400,250))
         self.SetMaxSize((400,250))
         self.panel.SetSizer(vbox)

@@ -31,7 +31,7 @@ class Tabellone(wx.Frame):
         font = wx.Font(12,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         for x in (self.cartaCPU,self.cartaUTENTE,self.carteMazzo):
             x.SetFont(font)
-            x.SetForegroundColour("dark grey")
+            x.SetForegroundColour("white")
         v1.Add(self.cartaCPU, proportion=1, flag=wx.ALL, border=0)
         v2.Add(self.carteMazzo, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         v3.Add(self.cartaUTENTE, proportion=1, flag=wx.ALL, border=0)
@@ -62,7 +62,6 @@ class Tabellone(wx.Frame):
         self.S2.Hide()
         h = wx.BoxSizer(wx.VERTICAL)
         self.S3 = wx.StaticText(self.panel, label="")
-        
         self.Count1 = wx.Button(self.panel, label = "0", pos=(100,0))
         font = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.Count1.SetFont(font)
@@ -76,6 +75,7 @@ class Tabellone(wx.Frame):
         
         h.Add(self.Count1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         self.turnWinner = wx.StaticText(self.panel, label="")
+        self.turnWinner.SetForegroundColour("white")
         self.turnWinner.SetFont(font)
         h.Add(self.turnWinner, proportion=1, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         h.Add(self.Count2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -101,7 +101,8 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U2, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox2, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
-          
+        self.SetBackgroundColour("dark green")
+        
         self.SetMinSize((960, 875))
         self.Move((350,50))
         self.panel.SetSizer(vbox)

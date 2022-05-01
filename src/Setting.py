@@ -9,7 +9,7 @@ class SETTING(wx.Frame):
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
 
         st1 = wx.StaticText(self.panel, label="Background Colour:")
-        colori = ["red", "green", "white", "yellow", "blue"]
+        colori = ["brown", "dark green", "white", "yellow", "orange"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
         self.panel.SetBackgroundColour("white")
         self.COLORE = "white"
