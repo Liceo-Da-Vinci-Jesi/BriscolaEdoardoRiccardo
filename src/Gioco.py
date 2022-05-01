@@ -67,6 +67,7 @@ class Game:
         self.timerBarra.Bind(wx.EVT_TIMER, self.OnTimer)
         self.checkGauge = True #è attiva
         self.homeFinale.b2.Bind(wx.EVT_BUTTON, self.Restart)
+        self.countOpenMazzi = 0
         return
     
     def openSetting(self, evt):
@@ -78,6 +79,9 @@ class Game:
         self.DIMENSIONE = dim
         if self.DIMENSIONE == "FULLSCREEN":
             self.tabellone.Maximize()
+            res = self.tabellone.GetSize()
+            self.tabellone.SetMinSize(res)
+            self.tabellone.SetMaxSize(res)
         elif self.DIMENSIONE == "1300x1000":
             self.tabellone.SetMinSize((1300, 1000))
             self.tabellone.SetMaxSize((1300, 1000))
@@ -477,8 +481,10 @@ class Game:
         return
     
     def openMazzi(self, evt):
-        finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome)
-        finestra.Show()
+        if self.countOpenMazzi < 1:
+            self.countOpenMazzi += 1
+            finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome)
+            finestra.Show()
         return
     
     def PulisciCampo(self):
@@ -560,6 +566,7 @@ class Game:
 #fix nome (max 7 caratteri): fatto
 #Restart: fatto
 #giocataCPU in altro file
+#fare che non si può aprire una nuova scheda 'taken' se una è già aperta
 if __name__ == "__main__":
     app = wx.App()
     a = Game()

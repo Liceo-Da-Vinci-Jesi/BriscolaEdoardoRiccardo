@@ -1,4 +1,4 @@
-import wx
+import wx, Gioco
 from PIL import Image
 class Home(wx.Frame):
 
@@ -90,9 +90,15 @@ class Home(wx.Frame):
         
         flex.AddGrowableCol(1)
         
+        self.Bind(wx.EVT_CLOSE, self.chiudi)
         self.panel.SetSizer(flex)
         flex.Fit(self)
         self.Centre()
+        
+    def chiudi(self, evt):
+        Gioco.Game.countOpenMazzi -= 1
+        self.Close()
+        return
 
 # ----------------------------------------
 if __name__ == "__main__":

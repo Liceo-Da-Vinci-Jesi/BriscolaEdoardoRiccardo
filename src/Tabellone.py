@@ -47,9 +47,9 @@ class Tabellone(wx.Frame):
         self.C1 = wx.BitmapButton(self.panel, bitmap=bitmap, id=1, name = "")
         self.C2 = wx.BitmapButton(self.panel, bitmap=bitmap, id=2, name = "")
         self.C3 = wx.BitmapButton(self.panel, bitmap=bitmap, id=3, name = "")
-        hbox.Add(self.C1, proportion=1, flag=wx.ALL, border=0)
-        hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=0)
-        hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=0)
+        hbox.Add(self.C1, proportion=1, flag=wx.ALL, border=5)
+        hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=5)
+        hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         grid = wx.GridSizer(rows=1, cols=5, vgap=5, hgap=5)
