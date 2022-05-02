@@ -5,7 +5,6 @@ from PIL import Image
 class Game:
     def __init__(self):
         self.mazzo = classMazzo.Mazzo().mazzo
-        random.shuffle(self.mazzo)
         self.countTurno = 0
         self.timerCPU = wx.Timer()
         self.timerCPU.Bind(wx.EVT_TIMER, self.GiocataCPU)
@@ -35,7 +34,6 @@ class Game:
         self.lobby.Show()
         self.lobby.nome.Bind(wx.EVT_TEXT_ENTER, self.Start)
         
-        
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
         self.Setting.Hide()
@@ -50,8 +48,7 @@ class Game:
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
         self.Setting.random.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
         self.Setting.normal.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
-        self.difficulty = True
-        #random
+        self.difficulty = True #random
         
         self.tabellone = Tabellone.Tabellone()
         self.tabellone.Hide()
@@ -70,14 +67,11 @@ class Game:
         if self.DIMENSIONE == "FULLSCREEN":
             self.tabellone.Maximize()
             res = self.tabellone.GetSize()
-            self.tabellone.SetMinSize(res)
-            self.tabellone.SetMaxSize(res)
+            self.tabellone.res = res
         elif self.DIMENSIONE == "1300x1000":
-            self.tabellone.SetMinSize((1300, 1000))
-            self.tabellone.SetMaxSize((1300, 1000))
+            self.tabellone.res = (1300, 1000)
         elif self.DIMENSIONE == "1000x1000":
-            self.tabellone.SetMinSize((1000,1000))
-            self.tabellone.SetMaxSize((1000,1000))
+            self.tabellone.res = (1000, 1000)
         return
     def getColour(self,evt):
         colore = self.colore.GetStringSelection()
@@ -103,6 +97,8 @@ class Game:
         return
 
     def startGame(self):
+        self.tabellone.SetMaxSize(self.tabellone.res)
+        self.tabellone.SetMinSize(self.tabellone.res)
         self.nome = self.lobby.nome.GetValue()
         while len(self.user) != 3:
             if self.turno:
@@ -123,41 +119,20 @@ class Game:
         
         #Imposto la Briscola e il self.mazzo nel tabellone
         self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
-        img = Image.open("../carte/" + str(self.briscolaCarta[1]) + str(self.briscolaCarta[0]) + ".jpg")
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.bitmapBriscola = wx.Bitmap(wx_Image)
-        self.tabellone.S4.Bitmap = self.bitmapBriscola
+        self.ImpostaBitmap(self.briscolaCarta, self.tabellone.S4)
         
         #Imposto la mano dell'User
         #Carta 1
         self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
-        img = Image.open("../carte/" + self.user[0][1] + str(self.user[0][0]) + ".jpg")
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.tabellone.U1.Bitmap = wx.Bitmap(wx_Image)
+        self.ImpostaBitmap(self.user[0], self.tabellone.U1)
         
         #Carta 2
         self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
-        img = Image.open("../carte/" + self.user[1][1] + str(self.user[1][0]) + ".jpg")
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.tabellone.U2.Bitmap = wx.Bitmap(wx_Image)
+        self.ImpostaBitmap(self.user[1], self.tabellone.U2)
         
         #Carta 3
         self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
-        img = Image.open("../carte/" + self.user[2][1] + str(self.user[2][0]) + ".jpg")
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.tabellone.U3.Bitmap = wx.Bitmap(wx_Image)
+        self.ImpostaBitmap(self.user[2], self.tabellone.U3)
         
         #carta coperta (mano CPU)
         img = Image.open(self.Setting.BackType[self.Setting.retro])
@@ -175,6 +150,8 @@ class Game:
     
     def choiceBriscola(self):
         briscola = self.mazzo.pop()
+        #aggiungo la briscola al mazzo in modo che venga pescata per ultima
+        self.mazzo.append([briscola[0], briscola[1]])
         return briscola
     
     def GiocataUSER(self, evt):
@@ -187,9 +164,8 @@ class Game:
                         if n.GetLabel() == (str(i[0]) + i[1]):
                             cartaScelta = i
                     
+                    self.ImpostaBitmap(cartaScelta, self.tabellone.S2)
                     self.tabellone.S2.SetLabel(cartaClickata)
-                    self.tabellone.S2.Show()
-                    self.tabellone.S2.Bitmap = n.Bitmap
                     
                     n.SetLabel("")
                     n.Hide()
@@ -214,13 +190,7 @@ class Game:
                     self.turno = True
                     self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
                     
-                    img = Image.open("../carte/" + cartaCPU[1] + str(cartaCPU[0]) + ".jpg")
-                    img = img.resize((150,250))
-                    img2 = img.copy()
-                    wx_Image = wx.Image(img2.size[0], img2.size[1])
-                    wx_Image.SetData(img2.convert("RGB").tobytes())
-                    self.tabellone.S1.Show()
-                    self.tabellone.S1.Bitmap = wx.Bitmap(wx_Image)
+                    self.ImpostaBitmap(cartaCPU , self.tabellone.S1)
                     
                     n.SetLabel("")
                     n.Hide()
@@ -249,8 +219,8 @@ class Game:
                 self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
                 self.contaCPU.append([self.cUser[0], self.cUser[1]])
                 self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
-            if len(self.mazzo) - 2 > 0:
-                carteMazzo = len(self.mazzo) - 2
+            if len(self.mazzo) - 3 > 0:
+                carteMazzo = len(self.mazzo) - 3
             else:
                 carteMazzo = 0
             self.tabellone.carteMazzo.SetLabel(str(carteMazzo))
@@ -264,90 +234,45 @@ class Game:
         return
     
     def pescaCarta(self):
-        if len(self.mazzo) > 1:
-            if self.vincitoreTurno == self.nome:
-                carta = self.mazzo.pop()
-                self.user.append(carta)
-                for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
-                    if u.GetLabel() == "":
-                        u.SetLabel(str(carta[0]) + carta[1])
-                        cartaU = u
-                carta2 = self.mazzo.pop()
-                self.cpu.append(carta2)
-                for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                    if c.GetLabel() == "":
-                        c.SetLabel(str(carta2[0]) + carta2[1])
-                        cartaC = c
-            else:
-                carta2 = self.mazzo.pop()
-                self.cpu.append(carta2)
-                for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                    if c.GetLabel() == "":
-                        c.SetLabel(str(carta2[0]) + carta2[1])
-                        cartaC = c
-                carta = self.mazzo.pop()
-                self.user.append(carta)
-                for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
-                    if u.GetLabel() == "":
-                        u.SetLabel(str(carta[0]) + carta[1])
-                        cartaU = u
-                        
-            #carta pescata dall'utente
-            img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
-            img = img.resize((150,250))
-            img2 = img.copy()
-            wx_Image = wx.Image(img2.size[0], img2.size[1])
-            wx_Image.SetData(img2.convert("RGB").tobytes())
-            cartaU.Show()
-            cartaU.Bitmap = wx.Bitmap(wx_Image)
+        if self.vincitoreTurno == self.nome:
+            ordine = ("u", "c")
+        else:
+            ordine = ("c", "u")
             
-            #carta pescata dalla cpu
-            cartaC.Show()
-            cartaC.Bitmap = self.retro
+        if len(self.mazzo) > 1:
+            self.Pescata(ordine)
+            
         else:
             self.CONTA += 1
             if self.CONTA == 4:
                 self.Results()
-                return
-            if self.CONTA == 1:
-                if self.vincitoreTurno == self.nome:
-                    carta = self.mazzo.pop()
-                    self.user.append(carta)
-                    for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
-                        if u.GetLabel() == "":
-                            u.SetLabel(str(carta[0]) + carta[1])
-                            cartaU = u
-                    carta2 = self.briscolaCarta
-                    self.cpu.append(carta2)
-                    for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                        if c.GetLabel() == "":
-                            c.SetLabel(str(carta2[0]) + carta2[1])
-                            cartaC = c
-                else:
-                    carta2 = self.mazzo.pop()
-                    self.cpu.append(carta2)
-                    for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                        if c.GetLabel() == "":
-                            c.SetLabel(str(carta2[0]) + carta2[1])
-                            cartaC = c
-                    carta = self.briscolaCarta
-                    self.user.append(carta)
-                    for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
-                        if u.GetLabel() == "":
-                            u.SetLabel(str(carta[0]) + carta[1])
-                            cartaU = u
-                            
+                return 
+            if self.CONTA == 1: #faccio l'ultima pescata e nascondo la briscola e il mazzo
+                self.Pescata(ordine)
+                
                 self.tabellone.S4.Hide()
                 self.tabellone.S5.Hide()
-
-                #carta pescata dall'utente
-                cartaU.Show()
-                cartaU.Bitmap = self.bitmapBriscola
-                
-                #carta pescata dalla cpu
-                cartaC.Show()
-                cartaC.Bitmap = self.retro
         return
+    
+    def Pescata(self, ordine): #pescata normale
+        for giocatore in ordine:
+            carta = self.mazzo[0]
+            self.mazzo.remove(self.mazzo[0])
+            if giocatore == "u":
+                self.user.append(carta)
+                for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
+                    if u.GetLabel() == "":
+                        u.SetLabel(str(carta[0]) + carta[1])
+                        cartaU = u
+                        self.ImpostaBitmap(carta, cartaU)
+            else:
+                self.cpu.append(carta)
+                for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
+                    if c.GetLabel() == "":
+                        c.SetLabel(str(carta[0]) + carta[1])
+                        cartaC = c
+                        cartaC.Show()
+                        cartaC.Bitmap = self.retro
     
     def Results(self):
         self.tabellone.Hide()
@@ -361,8 +286,6 @@ class Game:
         self.cCPU = ""
         self.tabellone.S2.SetLabel("")
         self.cUser = ""
-        self.tabellone.Update()
-        self.tabellone.Refresh()
         return
     
     def Played(self,cartaUser,cartaCPU):  
@@ -414,6 +337,7 @@ class Game:
         self.lobby.Destroy()
         self.startGame()
         self.tabellone.Show()
+        self.tabellone.Centre()
         if not self.turno:
             self.timerCPU.StartOnce(1000)
         return
@@ -422,17 +346,19 @@ class Game:
         self.homeFinale.Destroy()
         self.__init__()
         return
-#fix risoluzioni: fatto
+    
+    def ImpostaBitmap(self, carta, button):
+        img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
+        img = img.resize((150,250))
+        img2 = img.copy()
+        wx_Image = wx.Image(img2.size[0], img2.size[1])
+        wx_Image.SetData(img2.convert("RGB").tobytes())
+        button.Show()
+        button.Bitmap = wx.Bitmap(wx_Image)
+        return
+            
 #sfondo
 #icone
-#colorazioni
-#descrizione turno: fatto
-#fix nome (max 7 caratteri): fatto
-#Restart: fatto
-#giocataCPU in altro file: fatto
-#fare che non si può aprire una nuova scheda 'taken' se una è già aperta
-#aggiornare il file 'Risultati' inserendo che è lui che gestisce le 'taken'
-#rivedere la funzione 'pescaCarta': può essere molto sintetizzata magari con un for e una lista
 
 if __name__ == "__main__":
     app = wx.App()

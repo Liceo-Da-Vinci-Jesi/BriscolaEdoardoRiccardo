@@ -13,7 +13,7 @@ class Mazzo:
         for seme in semi:
             for numero in numeri:
                 mazzo.append([numero, seme]) 
-        #random.shuffle(mazzo)
+        random.shuffle(mazzo)
         return mazzo
     
     

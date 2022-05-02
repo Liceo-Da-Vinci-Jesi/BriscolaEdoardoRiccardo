@@ -9,10 +9,9 @@ class SETTING(wx.Frame):
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
 
         st1 = wx.StaticText(self.panel, label="Background Colour:")
-        colori = ["brown", "dark green", "white", "yellow", "orange"]
+        colori = ["brown", "dark green", "grey", "orange", "purple"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
-        self.panel.SetBackgroundColour("white")
-        self.COLORE = "white"
+        self.COLORE = "dark green"
         
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(st1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -82,6 +81,7 @@ class SETTING(wx.Frame):
         vbox.Add(self.tornaIndietro, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
         
         box.Add(vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
+        
         self.SetMinSize((400, 500))
         self.SetMaxSize((400, 500))
         self.panel.SetSizer(box)

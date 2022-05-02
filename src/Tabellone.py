@@ -100,11 +100,11 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U1, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U2, proportion=1, flag=wx.ALL, border=5)
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
-        vbox.Add(hbox2, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)  
-        #self.SetBackgroundColour("dark green")
+        vbox.Add(hbox2, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        self.res = (1000,1000)
+        self.SetBackgroundColour("dark green")
         
-        self.SetMinSize((960, 875))
-        self.Move((350,50))
+        self.Move((450,00))
         self.panel.SetSizer(vbox)
         vbox.Fit(self)
         return
