@@ -1,18 +1,19 @@
-import wx, Gioco
+import wx
 from PIL import Image
 class Home(wx.Frame):
 
-    def __init__(self, utente, cpu, nome):
+    def __init__(self, utente, cpu, nome, colore):
         super().__init__(None, title="BRISCOLA | DECKs")
-        self.panel = wx.Panel(self)
+        panel = wx.Panel(self)
+        
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         flex = wx.FlexGridSizer(rows = 2, cols = 2, vgap=5, hgap=5)
-        name = wx.TextCtrl(self.panel, style=wx.TE_READONLY, size=(150,300))
+        name = wx.TextCtrl(panel, style=wx.TE_READONLY, size=(150,300))
         name.SetBackgroundColour("white")
         name.SetForegroundColour("black")
         name.SetValue(nome)
         name.SetFont(font)
-        name.Enable(False)
+        
         
         h1 = wx.BoxSizer(wx.HORIZONTAL)
         h2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -28,7 +29,7 @@ class Home(wx.Frame):
             wx_Image = wx.Image(img.size[0], img.size[1])
             wx_Image.SetData(img.convert("RGB").tobytes())
             bitmap = wx.Bitmap(wx_Image)
-            bmp = wx.BitmapButton(self.panel, bitmap=bitmap)
+            bmp = wx.BitmapButton(panel, bitmap=bitmap)
             if conta < 10:
                 h1.Add(bmp, proportion=0, flag=wx.ALL, border=5)
             else:
@@ -44,12 +45,12 @@ class Home(wx.Frame):
         vbox.Add(h5, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(h6, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        CPU = wx.TextCtrl(self.panel, style=wx.TE_READONLY, size=(150,300))
+        CPU = wx.TextCtrl(panel, style=wx.TE_READONLY, size=(150,300))
         CPU.SetBackgroundColour("white")
         CPU.SetForegroundColour("black")
         CPU.SetValue("CPU")
         CPU.SetFont(font)
-        CPU.Enable(False)
+        
 
         h3 = wx.BoxSizer(wx.HORIZONTAL)
         h4 = wx.BoxSizer(wx.HORIZONTAL)
@@ -65,7 +66,7 @@ class Home(wx.Frame):
             wx_Image = wx.Image(img.size[0], img.size[1])
             wx_Image.SetData(img.convert("RGB").tobytes())
             bitmap = wx.Bitmap(wx_Image)
-            bmp = wx.BitmapButton(self.panel, bitmap=bitmap)
+            bmp = wx.BitmapButton(panel, bitmap=bitmap)
             if conta < 10:
                 h3.Add(bmp, proportion=0, flag=wx.ALL, border=5)
             else:
@@ -81,8 +82,6 @@ class Home(wx.Frame):
         vbox2.Add(h7, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox2.Add(h8, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        self.SetBackgroundColour("black")
-        
         flex.Add(name, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         flex.Add(vbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         flex.Add(CPU, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -90,22 +89,34 @@ class Home(wx.Frame):
         
         flex.AddGrowableCol(1)
         
-        self.Bind(wx.EVT_CLOSE, self.chiudi)
-        self.panel.SetSizer(flex)
-        flex.Fit(self)
-        self.Centre()
+        self.SetBackgroundColour(colore)
+        name.Enable(False)
+        CPU.Enable(False)
         
-    def chiudi(self, evt):
-        Gioco.Game.countOpenMazzi -= 1
-        self.Close()
-        return
-
+        v = wx.BoxSizer(wx.VERTICAL)
+        v.Add(flex, proportion=1, flag=wx.ALL, border=5)
+        
+        img = Image.open("../carte/goback.png")
+        img = img.resize((75,50))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        self.button = wx.BitmapButton(panel, bitmap = bitmap)
+        v.Add(self.button, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=10)
+        
+        self.SetBackgroundColour(colore)
+        panel.SetSizer(v)
+        v.Fit(self)
+        res = self.GetSize()
+        self.SetMinSize(res)
+        self.SetMaxSize(res)
+        self.Centre()
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
-    #nome = "PROVA"
-    #utente = [[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],]
-    #cpu = [[4, "Spadi"],[7, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"]]
-    window = Home()
+    nome = "PROVA"
+    utente = [[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],]
+    cpu = [[4, "Spadi"],[7, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"],[1, "Bastoni"],[10, "Coppe"]]
+    window = Home(utente, cpu, nome, "red")
     window.Show()
     app.MainLoop()

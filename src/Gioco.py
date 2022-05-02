@@ -25,7 +25,6 @@ class Game:
         #Mazzi
         self.contaUSER = []
         self.contaCPU = []
-        self.Punti = [0, 11, 0, 10, 0, 0, 0, 0, 2, 3, 4]
         
         self.CONTA = 0
         self.turno = random.choice((True, False))
@@ -57,16 +56,6 @@ class Game:
         self.tabellone.U1.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         self.tabellone.U2.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         self.tabellone.U3.Bind(wx.EVT_BUTTON, self.GiocataUSER)
-        
-        self.homeFinale = Risultati.Home()
-        self.homeFinale.Hide()
-        self.contaBarra = 0
-        self.barra = self.homeFinale.barra
-        self.timerBarra = wx.Timer()
-        self.timerBarra.Bind(wx.EVT_TIMER, self.OnTimer)
-        self.checkGauge = True #è attiva
-        self.homeFinale.b2.Bind(wx.EVT_BUTTON, self.Restart)
-        self.countOpenMazzi = 0
         return
     
     def openSetting(self, evt):
@@ -93,7 +82,6 @@ class Game:
         self.COLORE = colore
         self.Setting.panel.SetBackgroundColour(self.COLORE)
         self.tabellone.panel.SetBackgroundColour(self.COLORE)
-        self.homeFinale.panel.SetBackgroundColour(self.COLORE)
         self.Setting.Refresh()
         return
     def getDifficulty(self, evt):
@@ -361,35 +349,9 @@ class Game:
     
     def Results(self):
         self.tabellone.Hide()
+        self.homeFinale = Risultati.Home(self.contaUSER, self.contaCPU, self.nome, self.COLORE)
+        self.homeFinale.b2.Bind(wx.EVT_BUTTON, self.Restart)
         self.homeFinale.Show()
-        self.timerBarra.Start(1)
-        return
-    def OnTimer(self, event):
-        if self.checkGauge:
-            self.contaBarra += 1
-            self.barra.SetValue(self.contaBarra)
-            if self.barra.GetValue() == (self.barra.GetRange() + 50):
-                self.barra.Destroy()
-                self.checkGauge = False
-        else:
-            self.timerBarra.Stop()
-            puntiUtente = self.contaPunti(self.contaUSER)
-            puntiCpu = self.contaPunti(self.contaCPU)
-            if puntiUtente > puntiCpu:
-                self.homeFinale.winner.SetLabel("Congratulations! You are the winner!")
-            elif puntiUtente < puntiCpu:
-                self.homeFinale.winner.SetLabel("CPU is the winner! Try again ;)")
-            else:
-                self.homeFinale.winner.SetLabel("None has won...")
-            self.homeFinale.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
-            self.homeFinale.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
-        return
-    
-    def openMazzi(self, evt):
-        if self.countOpenMazzi < 1:
-            self.countOpenMazzi += 1
-            finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome)
-            finestra.Show()
         return
     
     def PulisciCampo(self):
@@ -397,6 +359,8 @@ class Game:
         self.cCPU = ""
         self.tabellone.S2.SetLabel("")
         self.cUser = ""
+        self.tabellone.Update()
+        self.tabellone.Refresh()
         return
     
     def Played(self,cartaUser,cartaCPU):  
@@ -443,13 +407,6 @@ class Game:
         else:
             self.vincitoreTurno = "CPU"
             return self.vincitoreTurno
-        
-    def contaPunti(self, l):
-        lista = l
-        somma = 0
-        for n in lista:
-            somma += self.Punti[n[0]]
-        return somma
     
     def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)
         self.lobby.Destroy()
