@@ -35,6 +35,7 @@ class Game:
         self.lobby.Show()
         self.lobby.nome.Bind(wx.EVT_TEXT_ENTER, self.Start)
         
+        
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
         self.Setting.Hide()
@@ -49,7 +50,8 @@ class Game:
         self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
         self.Setting.random.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
         self.Setting.normal.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
-        self.difficulty = True #random
+        self.difficulty = True
+        #random
         
         self.tabellone = Tabellone.Tabellone()
         self.tabellone.Hide()
