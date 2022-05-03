@@ -8,12 +8,12 @@ class Home(wx.Frame):
         
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         flex = wx.FlexGridSizer(rows = 2, cols = 2, vgap=5, hgap=5)
-        name = wx.TextCtrl(panel, style=wx.TE_READONLY, size=(150,300))
+        name = wx.StaticText(panel, label = nome)
         name.SetBackgroundColour("white")
         name.SetForegroundColour("black")
-        name.SetValue(nome)
         name.SetFont(font)
-        
+        hname = wx.BoxSizer(wx.HORIZONTAL)
+        hname.Add(name, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL)
         
         h1 = wx.BoxSizer(wx.HORIZONTAL)
         h2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -45,11 +45,12 @@ class Home(wx.Frame):
         vbox.Add(h5, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(h6, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        CPU = wx.TextCtrl(panel, style=wx.TE_READONLY, size=(150,300))
+        CPU = wx.StaticText(panel, label="CPU")
         CPU.SetBackgroundColour("white")
         CPU.SetForegroundColour("black")
-        CPU.SetValue("CPU")
         CPU.SetFont(font)
+        hCPU = wx.BoxSizer(wx.HORIZONTAL)
+        hCPU.Add(CPU, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         
 
         h3 = wx.BoxSizer(wx.HORIZONTAL)
@@ -82,17 +83,15 @@ class Home(wx.Frame):
         vbox2.Add(h7, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox2.Add(h8, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        flex.Add(name, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        flex.Add(hname, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         flex.Add(vbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        flex.Add(CPU, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        flex.Add(hCPU, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         flex.Add(vbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         flex.AddGrowableCol(1)
         
         self.SetBackgroundColour(colore)
-        name.Enable(False)
-        CPU.Enable(False)
-        
+
         v = wx.BoxSizer(wx.VERTICAL)
         v.Add(flex, proportion=1, flag=wx.ALL, border=5)
         

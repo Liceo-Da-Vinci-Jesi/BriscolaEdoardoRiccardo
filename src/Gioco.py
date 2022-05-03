@@ -4,7 +4,7 @@ import random, classMazzo, Tabellone, wx, Lobby, Risultati, Setting, finestraMaz
 from PIL import Image
 class Game:
     def __init__(self):
-        self.mazzo = classMazzo.Mazzo().mazzo
+        self.mazzo = classMazzo.Mazzo().generaMazzo()
         self.countTurno = 0
         self.timerCPU = wx.Timer()
         self.timerCPU.Bind(wx.EVT_TIMER, self.GiocataCPU)
@@ -28,35 +28,100 @@ class Game:
         self.CONTA = 0
         self.turno = random.choice((True, False))
         print(self.turno)
-        self.briscolaCarta = self.choiceBriscola()
-        self.briscolaSeme = self.briscolaCarta[1]
+    
         self.lobby = Lobby.Home()
         self.lobby.Show()
         self.lobby.nome.Bind(wx.EVT_TEXT_ENTER, self.Start)
+        self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
+        self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
         
         self.Setting = Setting.SETTING()
         self.Setting.Bind(wx.EVT_CLOSE, self.backLobby)
         self.Setting.Hide()
+        
+        #COLORE e DIMENSIONE sono le variabili, colore e dimensione sono le rispettive checkbox
         self.COLORE = self.Setting.COLORE
         self.colore = self.Setting.colore
-        self.colore.Bind(wx.EVT_COMBOBOX, self.getColour)
-        self.Setting.tornaIndietro.Bind(wx.EVT_BUTTON, self.backLobby)
         self.DIMENSIONE = self.Setting.DIMENSIONE
         self.dimensione = self.Setting.dimensione
+        
+        self.colore.Bind(wx.EVT_COMBOBOX, self.getColour)
         self.Setting.dimensione.Bind(wx.EVT_COMBOBOX, self.getRes)
-        self.lobby.b1.Bind(wx.EVT_BUTTON, self.openSetting)
-        self.lobby.b2.Bind(wx.EVT_BUTTON, self.Start)
         self.Setting.random.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
         self.Setting.normal.Bind(wx.EVT_RADIOBUTTON, self.getDifficulty)
+        self.Setting.tornaIndietro.Bind(wx.EVT_BUTTON, self.backLobby)
         self.difficulty = True #random
         
         self.tabellone = Tabellone.Tabellone()
-        self.tabellone.Hide()
-        self.tabellone.U1.Bind(wx.EVT_BUTTON, self.GiocataUSER)
-        self.tabellone.U2.Bind(wx.EVT_BUTTON, self.GiocataUSER)
-        self.tabellone.U3.Bind(wx.EVT_BUTTON, self.GiocataUSER)
         return
     
+    def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)
+        self.lobby.Hide()
+        self.startGame()
+        self.tabellone.Show()
+        self.tabellone.Centre()
+        if not self.turno:
+            self.timerCPU.StartOnce(1000)
+        return
+
+    def startGame(self):
+        self.tabellone.SetMaxSize(self.tabellone.res)
+        self.tabellone.SetMinSize(self.tabellone.res)
+        #collego i pulsanti  giocabili dall'utente alla loro funzione
+        for pulsante in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
+            pulsante.Bind(wx.EVT_BUTTON, self.GiocataUSER)
+        
+        self.nome = self.lobby.nome.GetValue()
+        if self.turno:
+            ordine = (self.user, self.cpu)
+        else:
+            ordine = (self.cpu, self.user)
+        for n in range(3):
+            for mano in ordine:
+                carta = self.mazzo[0]
+                self.mazzo.remove(self.mazzo[0])
+                mano.append(carta)
+                
+        self.briscolaCarta = self.choiceBriscola()
+        self.briscolaSeme = self.briscolaCarta[1]
+        
+        #Imposto la mano della CPU
+        self.tabellone.C1.SetLabel(str(self.cpu[0][0]) + self.cpu[0][1])
+        self.tabellone.C2.SetLabel(str(self.cpu[1][0]) + self.cpu[1][1])
+        self.tabellone.C3.SetLabel(str(self.cpu[2][0]) + self.cpu[2][1])
+        
+        #Imposto la Briscola e il self.mazzo nel tabellone
+        self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
+        self.ImpostaBitmap(self.briscolaCarta, self.tabellone.S4)
+        
+        #Imposto la mano dell'User
+        #Carta 1
+        self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
+        self.ImpostaBitmap(self.user[0], self.tabellone.U1)
+        
+        #Carta 2
+        self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
+        self.ImpostaBitmap(self.user[1], self.tabellone.U2)
+        
+        #Carta 3
+        self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
+        self.ImpostaBitmap(self.user[2], self.tabellone.U3)
+        
+        #carta coperta (mano CPU)
+        img = Image.open(self.Setting.BackType[self.Setting.retro])
+        img = img.resize((150,250))
+        img2 = img.copy()
+        wx_Image = wx.Image(img2.size[0], img2.size[1])
+        wx_Image.SetData(img2.convert("RGB").tobytes())
+        self.retro = wx.Bitmap(wx_Image)
+        
+        self.tabellone.C1.Bitmap = self.retro
+        self.tabellone.C2.Bitmap = self.retro
+        self.tabellone.C3.Bitmap = self.retro
+        self.tabellone.S5.Bitmap = self.retro
+        return
+
+
     def openSetting(self, evt):
         self.lobby.Enable(False)
         self.Setting.Show()
@@ -94,56 +159,6 @@ class Game:
         self.Setting.Hide()
         self.lobby.Enable(True)
         self.lobby.Raise()
-        return
-
-    def startGame(self):
-        self.tabellone.SetMaxSize(self.tabellone.res)
-        self.tabellone.SetMinSize(self.tabellone.res)
-        self.nome = self.lobby.nome.GetValue()
-        if self.turno:
-            ordine = (self.user, self.cpu)
-        else:
-            ordine = (self.cpu, self.user)
-        for n in range(3):
-            for mano in ordine:
-                carta = self.mazzo[0]
-                self.mazzo.remove(self.mazzo[0])
-                mano.append(carta)
-        
-        #Imposto la mano della CPU
-        self.tabellone.C1.SetLabel(str(self.cpu[0][0]) + self.cpu[0][1])
-        self.tabellone.C2.SetLabel(str(self.cpu[1][0]) + self.cpu[1][1])
-        self.tabellone.C3.SetLabel(str(self.cpu[2][0]) + self.cpu[2][1])
-        
-        #Imposto la Briscola e il self.mazzo nel tabellone
-        self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
-        self.ImpostaBitmap(self.briscolaCarta, self.tabellone.S4)
-        
-        #Imposto la mano dell'User
-        #Carta 1
-        self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
-        self.ImpostaBitmap(self.user[0], self.tabellone.U1)
-        
-        #Carta 2
-        self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
-        self.ImpostaBitmap(self.user[1], self.tabellone.U2)
-        
-        #Carta 3
-        self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
-        self.ImpostaBitmap(self.user[2], self.tabellone.U3)
-        
-        #carta coperta (mano CPU)
-        img = Image.open(self.Setting.BackType[self.Setting.retro])
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.retro = wx.Bitmap(wx_Image)
-        
-        self.tabellone.C1.Bitmap = self.retro
-        self.tabellone.C2.Bitmap = self.retro
-        self.tabellone.C3.Bitmap = self.retro
-        self.tabellone.S5.Bitmap = self.retro
         return
     
     def choiceBriscola(self):
@@ -237,7 +252,7 @@ class Game:
         else:
             ordine = ("c", "u")
             
-        if len(self.mazzo) > 1:
+        if len(self.mazzo) > 3:
             self.Pescata(ordine)
         else:
             self.CONTA += 1
@@ -310,15 +325,6 @@ class Game:
         else:
             self.turno = False
         return self.vincitoreTurno
-    
-    def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)
-        self.lobby.Destroy()
-        self.startGame()
-        self.tabellone.Show()
-        self.tabellone.Centre()
-        if not self.turno:
-            self.timerCPU.StartOnce(1000)
-        return
     
     def Restart(self, evt):
         self.homeFinale.Destroy()

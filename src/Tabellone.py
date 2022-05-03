@@ -44,9 +44,9 @@ class Tabellone(wx.Frame):
         #Mano CPU
         hbox = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "CPU's HAND")
         
-        self.C1 = wx.BitmapButton(self.panel, bitmap=bitmap, id=1, name = "")
-        self.C2 = wx.BitmapButton(self.panel, bitmap=bitmap, id=2, name = "")
-        self.C3 = wx.BitmapButton(self.panel, bitmap=bitmap, id=3, name = "")
+        self.C1 = wx.StaticBitmap(self.panel, bitmap=bitmap, id=1, name = "")
+        self.C2 = wx.StaticBitmap(self.panel, bitmap=bitmap, id=2, name = "")
+        self.C3 = wx.StaticBitmap(self.panel, bitmap=bitmap, id=3, name = "")
         hbox.Add(self.C1, proportion=1, flag=wx.ALL, border=5)
         hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=5)
         hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=5)
@@ -79,8 +79,8 @@ class Tabellone(wx.Frame):
         self.turnWinner.SetFont(font)
         h.Add(self.turnWinner, proportion=1, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         h.Add(self.Count2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        self.S4 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "BRISCOLA")
-        self.S5 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "MAZZO")
+        self.S4 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "BRISCOLA")
+        self.S5 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "MAZZO")
         
         h1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "BRISCOLA")
         h1.Add(self.S4, proportion=1, flag=wx.ALL, border=5)
