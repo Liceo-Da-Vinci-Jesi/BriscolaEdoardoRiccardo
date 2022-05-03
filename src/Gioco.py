@@ -100,17 +100,15 @@ class Game:
         self.tabellone.SetMaxSize(self.tabellone.res)
         self.tabellone.SetMinSize(self.tabellone.res)
         self.nome = self.lobby.nome.GetValue()
-        while len(self.user) != 3:
-            if self.turno:
-                carta = self.mazzo.pop()
-                self.user.append(carta)
-                carta = self.mazzo.pop()
-                self.cpu.append(carta)
-            else:
-                carta = self.mazzo.pop() 
-                self.cpu.append(carta)
-                carta = self.mazzo.pop()
-                self.user.append(carta)  
+        if self.turno:
+            ordine = (self.user, self.cpu)
+        else:
+            ordine = (self.cpu, self.user)
+        for n in range(3):
+            for mano in ordine:
+                carta = self.mazzo[0]
+                self.mazzo.remove(self.mazzo[0])
+                mano.append(carta)
         
         #Imposto la mano della CPU
         self.tabellone.C1.SetLabel(str(self.cpu[0][0]) + self.cpu[0][1])
@@ -241,7 +239,6 @@ class Game:
             
         if len(self.mazzo) > 1:
             self.Pescata(ordine)
-            
         else:
             self.CONTA += 1
             if self.CONTA == 4:
@@ -289,49 +286,30 @@ class Game:
         return
     
     def Played(self,cartaUser,cartaCPU):  
-        #Controllo chi ha vinto (il turno)
+        #ritorna il vincitore del turno
+        importanza = [2,4,5,6,7,8,9,10,3,1]
         if cartaUser[1] == cartaCPU[1]:
-            if cartaUser[0] == 1:
+            if importanza.index(cartaUser[0]) > importanza.index(cartaCPU[0]):
                 self.vincitoreTurno = self.nome
-                self.turno = True
-                return self.vincitoreTurno
-            elif cartaUser[0] == 3 and cartaCPU[0] != 1:
-                self.vincitoreTurno = self.nome
-                self.turno = True
-                return self.vincitoreTurno
-            elif cartaCPU[0] == 1:
-                self.vincitoreTurno = "CPU"
-                self.turno = False
-                return self.vincitoreTurno
-            elif cartaCPU[0] == 3 and cartaUser[0] != 1:
-                self.vincitoreTurno = "CPU"
-                self.turno = False
-                return self.vincitoreTurno
-            
-            if cartaUser[0] > cartaCPU[0]:
-                self.vincitoreTurno = self.nome
-                self.turno = True
             else:
                 self.vincitoreTurno = "CPU"
-                self.turno = False
-            return self.vincitoreTurno
         
-        if cartaUser[1] == self.briscolaSeme:
-            self.vincitoreTurno = self.nome
-            self.turno = True
-            return self.vincitoreTurno
-        
-        if cartaCPU[1] == self.briscolaSeme:
-            self.vincitoreTurno = "CPU"
-            self.turno = False
-            return self.vincitoreTurno
-    
-        if self.turno:
-            self.vincitoreTurno = self.nome
-            return self.vincitoreTurno
+        elif self.briscolaSeme in [cartaUser[1], cartaCPU[1]]:
+            if cartaUser[1] == self.briscolaSeme:
+                self.vincitoreTurno = self.nome
+            else:
+                self.vincitoreTurno = "CPU"
         else:
-            self.vincitoreTurno = "CPU"
-            return self.vincitoreTurno
+            if self.turno:
+                self.vincitoreTurno = self.nome
+            else:
+                self.vincitoreTurno = "CPU"
+        
+        if self.vincitoreTurno == self.nome:
+            self.turno = True
+        else:
+            self.turno = False
+        return self.vincitoreTurno
     
     def Start(self, evt):                 #Gioco vero e proprio (inizia e lascia giocare)
         self.lobby.Destroy()
@@ -359,7 +337,7 @@ class Game:
             
 #sfondo
 #icone
-
+#(se si riesce) rifare la funzione 'Played' rendendola + corta
 if __name__ == "__main__":
     app = wx.App()
     a = Game()
