@@ -95,17 +95,11 @@ class Game:
         self.ImpostaBitmap(self.briscolaCarta, self.tabellone.S4)
         
         #Imposto la mano dell'User
-        #Carta 1
-        self.tabellone.U1.SetLabel(str(self.user[0][0]) + self.user[0][1])
-        self.ImpostaBitmap(self.user[0], self.tabellone.U1)
-        
-        #Carta 2
-        self.tabellone.U2.SetLabel(str(self.user[1][0]) + self.user[1][1])
-        self.ImpostaBitmap(self.user[1], self.tabellone.U2)
-        
-        #Carta 3
-        self.tabellone.U3.SetLabel(str(self.user[2][0]) + self.user[2][1])
-        self.ImpostaBitmap(self.user[2], self.tabellone.U3)
+        c = 0
+        for carta in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
+            carta.SetLabel(str(self.user[c][0]) + self.user[c][1])
+            self.ImpostaBitmap(self.user[c], carta)
+            c += 1
         
         #carta coperta (mano CPU)
         img = Image.open(self.Setting.BackType[self.Setting.retro])
@@ -185,7 +179,6 @@ class Game:
                     self.tabellone.cartaUTENTE.SetLabel(str(cartaScelta[0]) + " " + cartaScelta[1])
                     self.user.remove(cartaScelta)
                     self.cUser = cartaScelta
-
         self.turno = False
         if self.GiocataCompleta():
             self.timerAttesa.StartOnce(1000)
@@ -243,7 +236,7 @@ class Game:
             self.tabellone.S1.Hide()
             self.tabellone.S2.Hide()
             if self.vincitoreTurno != self.nome and self.CONTA < 4:
-                self.timerCPU.StartOnce(1000)
+                self.timerCPU.StartOnce(2000)
         return
     
     def pescaCarta(self):
@@ -298,6 +291,8 @@ class Game:
         self.cCPU = ""
         self.tabellone.S2.SetLabel("")
         self.cUser = ""
+        self.tabellone.cartaUTENTE.SetLabel("")
+        self.tabellone.cartaCPU.SetLabel("")
         return
     
     def Played(self,cartaUser,cartaCPU):  
@@ -340,10 +335,6 @@ class Game:
         button.Show()
         button.Bitmap = wx.Bitmap(wx_Image)
         return
-            
-#sfondo
-#icone
-#(se si riesce) rifare la funzione 'Played' rendendola + corta
 if __name__ == "__main__":
     app = wx.App()
     a = Game()

@@ -35,35 +35,26 @@ class Home(wx.Frame):
         self.nome.SetMaxLength(8)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        img = Image.open("../carte/settingIcon.png")
-        img = img.resize((100,40))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
-        self.b1 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
+        bitmap = self.ImpostaBitmap("../carte/settingIcon.png", (100, 50))
+        self.b1 = wx.BitmapButton(self.panel, bitmap = bitmap, size= (50,50))
         self.b1.SetBackgroundColour("white")
         
-        img = Image.open("../carte/startIcon.png")
-        img = img.resize((116,50))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
-        self.b2 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
+        bitmap = self.ImpostaBitmap("../carte/startIcon.png", (110,75))
+        self.b2 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(100,50))
         self.b2.Enable(False)
         
-        img = Image.open("../carte/RulesIcon.png")
-        img = img.resize((60,45))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
+        bitmap = self.ImpostaBitmap("../carte/RulesIcon.png", (100,50))
         self.b3 = wx.BitmapButton(self.panel, bitmap = bitmap, size=(50,50))
         
         self.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
         
+        for x in (self.b1, self.b2, self.b3):
+            x.SetBackgroundColour("dark grey")
+        
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
+        vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         self.SetBackgroundColour("dark grey")
         self.SetMinSize((400,250))
         self.SetMaxSize((400,250))
@@ -81,6 +72,13 @@ class Home(wx.Frame):
         webbrowser.open("https://en.wikipedia.org/wiki/Briscola")
         return
 
+    def ImpostaBitmap(self, file, dim):
+        img = Image.open(file)
+        img = img.resize((dim)) #150x75 o 75x75
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        return bitmap
 
 # ----------------------------------------
 if __name__ == "__main__":

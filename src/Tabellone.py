@@ -55,10 +55,10 @@ class Tabellone(wx.Frame):
         grid = wx.GridSizer(rows=1, cols=5, vgap=5, hgap=5)
         #S = linea centrale: 5 colonne (1° carta CPU, 2° carta User, 3° vuoto, 4° Briscola, 5° Mazzo)
         #S1 = CARTA CPU
-        self.S1 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "")
+        self.S1 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "")
         self.S1.Hide()
         #S2 = CARTA USER
-        self.S2 = wx.BitmapButton(self.panel, bitmap=bitmap, name = "")
+        self.S2 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "")
         self.S2.Hide()
         h = wx.BoxSizer(wx.VERTICAL)
         self.S3 = wx.StaticText(self.panel, label="")
@@ -87,9 +87,9 @@ class Tabellone(wx.Frame):
         h2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK")
         h2.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
         grid.Add(h1, proportion=0, flag=wx.ALL, border=5)
-        grid.Add(self.S1, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(self.S1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         grid.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        grid.Add(self.S2, proportion=1, flag=wx.ALL, border=5)
+        grid.Add(self.S2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         grid.Add(h2, proportion=0, flag=wx.ALL, border=5)
         vbox.Add(grid, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         

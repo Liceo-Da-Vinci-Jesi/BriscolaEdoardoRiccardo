@@ -49,11 +49,11 @@ class Home(wx.Frame):
         vbox.Add(self.barra, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        bitmap = self.ImpostaBitmapIcona("../carte/cardsIcon.png")
+        bitmap = self.ImpostaBitmap("../carte/cardsIcon.png", (75,75))
         self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmapIcona("../carte/restartIcon.png")
+        bitmap = self.ImpostaBitmap("../carte/restartIcon.png", (75,75))
         self.b2 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmapIcona("../carte/closeIcon.png")
+        bitmap = self.ImpostaBitmap("../carte/closeIcon.png", (75,75))
         self.b3 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
         self.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
         self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)
@@ -90,13 +90,13 @@ class Home(wx.Frame):
             puntiCpu = self.contaPunti(self.contaCPU)
             if puntiUtente > puntiCpu:
                 self.winner.SetLabel("Congratulations! You are the winner!")
-                bitmap = self.ImpostaBitmap("../carte/winIcon.png")
+                bitmap = self.ImpostaBitmap("../carte/winIcon.png", (150,75))
             elif puntiUtente < puntiCpu:
                 self.winner.SetLabel("CPU is the winner! Try again ;)")
-                bitmap = self.ImpostaBitmap("../carte/loseIcon.png")
+                bitmap = self.ImpostaBitmap("../carte/loseIcon.png", (150,75))
             else:
                 self.winner.SetLabel("None has won...")
-                bitmap = self.ImpostaBitmap("../carte/drawIcon.jpg")
+                bitmap = self.ImpostaBitmap("../carte/drawIcon.jpg", (150,75))
             self.immagine.SetBitmap(bitmap)
             self.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
             return
@@ -121,16 +121,9 @@ class Home(wx.Frame):
         self.Enable(True)
         return
     
-    def ImpostaBitmap(self, file):
+    def ImpostaBitmap(self, file, dim):
         img = Image.open(file)
-        img = img.resize((150,75))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
-        return bitmap
-    def ImpostaBitmapIcona(self, file):
-        img = Image.open(file)
-        img = img.resize((75,75))
+        img = img.resize((dim)) #150x75 o 75x75
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)

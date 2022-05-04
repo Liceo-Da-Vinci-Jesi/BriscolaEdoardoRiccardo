@@ -82,8 +82,8 @@ class SETTING(wx.Frame):
         
         box.Add(vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
         
-        self.SetMinSize((400, 500))
-        self.SetMaxSize((400, 500))
+        self.SetMinSize((400, 400))
+        self.SetMaxSize((400, 400))
         self.panel.SetSizer(box)
         self.Centre()
         self.Move((400,150))
