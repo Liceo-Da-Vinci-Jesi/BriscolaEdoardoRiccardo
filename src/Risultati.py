@@ -19,20 +19,20 @@ class Home(wx.Frame):
         
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         vbox  = wx.BoxSizer(wx.VERTICAL)
-        staticText = wx.StaticText(panel, label = "THANK YOU\nFOR HAVING PLAYED!")
+        staticText = wx.StaticText(panel, label = "THANK YOU FOR\nHAVING PLAYED!")
         staticText.SetForegroundColour("red")
         staticText.SetFont(font)
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(staticText, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
 
-        self.winner = wx.StaticText(panel, label = "Calculating scores, please wait")
+        self.winner = wx.StaticText(panel, label = "Calculating scores, please wait ...")
         self.winner.SetForegroundColour("dark grey")
         font2 = wx.Font(13,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.winner.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox2.Add(self.winner, proportion=1, flag=wx.ALL, border=0)
-        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
+        hbox2.Add(self.winner, proportion=1, flag=wx.ALL, border=5)
+        vbox.Add(hbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         v = wx.StaticBoxSizer(wx.VERTICAL, panel, "SCORE")
@@ -66,8 +66,8 @@ class Home(wx.Frame):
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         panel.SetSizer(vbox)
-        self.SetMinSize((400,325))
-        self.SetMaxSize((400,325))
+        self.SetMinSize((425,350))
+        self.SetMaxSize((425,350))
         self.Centre()
         
     def Chiudi(self, evt):
@@ -89,13 +89,13 @@ class Home(wx.Frame):
             puntiUtente = self.contaPunti(self.contaUSER)
             puntiCpu = self.contaPunti(self.contaCPU)
             if puntiUtente > puntiCpu:
-                self.winner.SetLabel("Congratulations! You are the winner!")
+                self.winner.SetLabel("Well Done! You are the winner!")
                 bitmap = self.ImpostaBitmap("../carte/winIcon.png", (150,75))
             elif puntiUtente < puntiCpu:
                 self.winner.SetLabel("CPU is the winner! Try again ;)")
                 bitmap = self.ImpostaBitmap("../carte/loseIcon.png", (150,75))
             else:
-                self.winner.SetLabel("None has won...")
+                self.winner.SetLabel("None has won... Try again!")
                 bitmap = self.ImpostaBitmap("../carte/drawIcon.jpg", (150,75))
             self.immagine.SetBitmap(bitmap)
             self.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
@@ -131,6 +131,6 @@ class Home(wx.Frame):
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
-    window = Home([[5, "Denari"]], [[1, "Coppe"]], "nome", "dark green")
+    window = Home([[1, "Denari"]], [[2, "Coppe"]], "nome", "dark green")
     window.Show()
     app.MainLoop()

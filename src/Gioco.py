@@ -114,8 +114,161 @@ class Game:
         self.tabellone.C3.Bitmap = self.retro
         self.tabellone.S5.Bitmap = self.retro
         return
+    
+    def choiceBriscola(self):
+            briscola = self.mazzo.pop()
+            #aggiungo la briscola al mazzo in modo che venga pescata per ultima
+            self.mazzo.append([briscola[0], briscola[1]])
+            return briscola
+    
+    def GiocataUSER(self, evt):
+        if self.turno:
+            puls = (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3)
+            cartaClickata = puls[evt.GetId() - 4].GetLabel()
+            for n in puls:
+                if n.GetLabel() == cartaClickata:
+                    for i in self.user:
+                        if n.GetLabel() == (str(i[0]) + i[1]):
+                            cartaScelta = i
+                    self.ImpostaBitmap(cartaScelta, self.tabellone.S2)
+                    self.tabellone.S2.SetLabel(cartaClickata)
+                    n.SetLabel("")
+                    n.Hide()
+                    self.tabellone.cartaUTENTE.SetLabel(str(cartaScelta[0]) + " " + cartaScelta[1])
+                    self.user.remove(cartaScelta)
+                    self.cUser = cartaScelta
+        self.turno = False
+        if self.GiocataCompleta():
+            self.timerAttesa.StartOnce(1000)
+            return
+        self.timerCPU.StartOnce(1000)
+        return
 
+    def GiocataCPU(self, evt):
+        #print(self.cpu)
+        if not self.turno:
+            cartaCPU = classGiocataCPU.Giocata(self.cpu, self.difficulty, self.briscolaSeme, self.cUser, self.vincitoreTurno).ScegliCarta()
+            for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
+                label = str(cartaCPU[0]) + cartaCPU[1]
+                if n.GetLabel() == label:
+                    self.turno = True
+                    self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
+                    self.ImpostaBitmap(cartaCPU , self.tabellone.S1)
+                    n.SetLabel("")
+                    n.Hide()
+                    self.tabellone.cartaCPU.SetLabel(str(cartaCPU[0]) + " " + cartaCPU[1])
+                    self.cpu.remove(cartaCPU)
+                    self.cCPU = cartaCPU
+        if self.GiocataCompleta():
+            self.timerAttesa.StartOnce(1000)
+            return
+        return
+   
+    def GiocataCompleta(self):
+        if self.tabellone.S1.GetLabel() != "" and self.tabellone.S2.GetLabel() != "":
+            self.countTurno += 1
+            return True
+        return False
+    
+    def fineTurno(self, evt):
+        if self.countTurno != 0:
+            vincitoreTurno = self.Played(self.cUser,self.cCPU)
+            if vincitoreTurno == self.nome:
+                self.contaUSER.append([self.cUser[0], self.cUser[1]])
+                self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
+                self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
+            else:
+                self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
+                self.contaCPU.append([self.cUser[0], self.cUser[1]])
+                self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
+            if len(self.mazzo) - 3 > 0:
+                carteMazzo = len(self.mazzo) - 3
+            else:
+                carteMazzo = 0
+            self.tabellone.carteMazzo.SetLabel(str(carteMazzo))
+            self.tabellone.turnWinner.SetLabel("TAKES: " + vincitoreTurno)
+            self.PulisciCampo()
+            self.pescaCarta()
+            self.tabellone.S1.Hide()
+            self.tabellone.S2.Hide()
+            if self.vincitoreTurno != self.nome and self.CONTA < 4:
+                self.timerCPU.StartOnce(750)
+        return
+    
+    #funzione che gestisce le pescate
+    def pescaCarta(self):
+        if self.vincitoreTurno == self.nome:
+            ordine = ("u", "c")
+        else:
+            ordine = ("c", "u")
+        if len(self.mazzo) > 3:
+            self.Pescata(ordine)
+        else:
+            self.CONTA += 1
+            if self.CONTA == 4:
+                self.Results()
+                return 
+            if self.CONTA == 1: #faccio l'ultima pescata e nascondo la briscola e il mazzo
+                self.Pescata(ordine)
+                self.tabellone.S4.Hide()
+                self.tabellone.S5.Hide()
+        return
+    
+    #funzione che pesca
+    def Pescata(self, ordine): #pescata normale
+        for giocatore in ordine:
+            carta = self.mazzo[0]
+            self.mazzo.remove(self.mazzo[0])
+            if giocatore == "u":
+                self.user.append(carta)
+                for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
+                    if u.GetLabel() == "":
+                        u.SetLabel(str(carta[0]) + carta[1])
+                        cartaU = u
+                        self.ImpostaBitmap(carta, cartaU)
+            else:
+                self.cpu.append(carta)
+                for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
+                    if c.GetLabel() == "":
+                        c.SetLabel(str(carta[0]) + carta[1])
+                        cartaC = c
+                        cartaC.Show()
+                        cartaC.Bitmap = self.retro
 
+    def PulisciCampo(self):
+        self.tabellone.S1.SetLabel("")
+        self.cCPU = ""
+        self.tabellone.S2.SetLabel("")
+        self.cUser = ""
+        self.tabellone.cartaUTENTE.SetLabel("")
+        self.tabellone.cartaCPU.SetLabel("")
+        return
+    
+    def Played(self,cartaUser,cartaCPU):  
+        #ritorna il vincitore del turno
+        importanza = [2,4,5,6,7,8,9,10,3,1]
+        if cartaUser[1] == cartaCPU[1]:
+            if importanza.index(cartaUser[0]) > importanza.index(cartaCPU[0]):
+                self.vincitoreTurno = self.nome
+            else:
+                self.vincitoreTurno = "CPU"
+        elif self.briscolaSeme in [cartaUser[1], cartaCPU[1]]:
+            if cartaUser[1] == self.briscolaSeme:
+                self.vincitoreTurno = self.nome
+            else:
+                self.vincitoreTurno = "CPU"
+        else:
+            if self.turno:
+                self.vincitoreTurno = self.nome
+            else:
+                self.vincitoreTurno = "CPU"
+        if self.vincitoreTurno == self.nome:
+            self.turno = True
+        else:
+            self.turno = False
+        return self.vincitoreTurno
+    
+#Ora le varie funzioni x le impostazioni
     def openSetting(self, evt):
         self.lobby.Enable(False)
         self.Setting.Show()
@@ -155,171 +308,12 @@ class Game:
         self.lobby.Raise()
         return
     
-    def choiceBriscola(self):
-        briscola = self.mazzo.pop()
-        #aggiungo la briscola al mazzo in modo che venga pescata per ultima
-        self.mazzo.append([briscola[0], briscola[1]])
-        return briscola
-    
-    def GiocataUSER(self, evt):
-        if self.turno:
-            puls = (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3)
-            cartaClickata = puls[evt.GetId() - 4].GetLabel()
-            for n in puls:
-                if n.GetLabel() == cartaClickata:
-                    for i in self.user:
-                        if n.GetLabel() == (str(i[0]) + i[1]):
-                            cartaScelta = i
-                    
-                    self.ImpostaBitmap(cartaScelta, self.tabellone.S2)
-                    self.tabellone.S2.SetLabel(cartaClickata)
-                    
-                    n.SetLabel("")
-                    n.Hide()
-                    self.tabellone.cartaUTENTE.SetLabel(str(cartaScelta[0]) + " " + cartaScelta[1])
-                    self.user.remove(cartaScelta)
-                    self.cUser = cartaScelta
-        self.turno = False
-        if self.GiocataCompleta():
-            self.timerAttesa.StartOnce(1000)
-            return
-        self.timerCPU.StartOnce(1000)
-        return
-
-    def GiocataCPU(self, evt):
-        #print(self.cpu)
-        if not self.turno:
-            cartaCPU = classGiocataCPU.Giocata(self.cpu, self.difficulty, self.briscolaSeme, self.cUser, self.vincitoreTurno).ScegliCarta()
-            for n in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                label = str(cartaCPU[0]) + cartaCPU[1]
-                if n.GetLabel() == label:
-                    self.turno = True
-                    self.tabellone.S1.SetLabel(str(cartaCPU[0]) + cartaCPU[1])
-                    
-                    self.ImpostaBitmap(cartaCPU , self.tabellone.S1)
-                    
-                    n.SetLabel("")
-                    n.Hide()
-                    self.tabellone.cartaCPU.SetLabel(str(cartaCPU[0]) + " " + cartaCPU[1])
-                    self.cpu.remove(cartaCPU)
-                    self.cCPU = cartaCPU
-        if self.GiocataCompleta():
-            self.timerAttesa.StartOnce(1000)
-            return
-        return
-   
-    def GiocataCompleta(self):
-        if self.tabellone.S1.GetLabel() != "" and self.tabellone.S2.GetLabel() != "":
-            self.countTurno += 1
-            return True
-        return False
-    
-    def fineTurno(self, evt):
-        if self.countTurno != 0:
-            vincitoreTurno = self.Played(self.cUser,self.cCPU)
-            if vincitoreTurno == self.nome:
-                self.contaUSER.append([self.cUser[0], self.cUser[1]])
-                self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
-                self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
-            else:
-                self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
-                self.contaCPU.append([self.cUser[0], self.cUser[1]])
-                self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))
-            if len(self.mazzo) - 3 > 0:
-                carteMazzo = len(self.mazzo) - 3
-            else:
-                carteMazzo = 0
-            self.tabellone.carteMazzo.SetLabel(str(carteMazzo))
-            self.tabellone.turnWinner.SetLabel("TAKES: " + vincitoreTurno)
-            self.PulisciCampo()
-            self.pescaCarta()
-            self.tabellone.S1.Hide()
-            self.tabellone.S2.Hide()
-            if self.vincitoreTurno != self.nome and self.CONTA < 4:
-                self.timerCPU.StartOnce(2000)
-        return
-    
-    def pescaCarta(self):
-        if self.vincitoreTurno == self.nome:
-            ordine = ("u", "c")
-        else:
-            ordine = ("c", "u")
-            
-        if len(self.mazzo) > 3:
-            self.Pescata(ordine)
-        else:
-            self.CONTA += 1
-            if self.CONTA == 4:
-                self.Results()
-                return 
-            if self.CONTA == 1: #faccio l'ultima pescata e nascondo la briscola e il mazzo
-                self.Pescata(ordine)
-                
-                self.tabellone.S4.Hide()
-                self.tabellone.S5.Hide()
-        return
-    
-    def Pescata(self, ordine): #pescata normale
-        for giocatore in ordine:
-            carta = self.mazzo[0]
-            self.mazzo.remove(self.mazzo[0])
-            if giocatore == "u":
-                self.user.append(carta)
-                for u in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
-                    if u.GetLabel() == "":
-                        u.SetLabel(str(carta[0]) + carta[1])
-                        cartaU = u
-                        self.ImpostaBitmap(carta, cartaU)
-            else:
-                self.cpu.append(carta)
-                for c in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
-                    if c.GetLabel() == "":
-                        c.SetLabel(str(carta[0]) + carta[1])
-                        cartaC = c
-                        cartaC.Show()
-                        cartaC.Bitmap = self.retro
-    
     def Results(self):
         self.tabellone.Hide()
         self.homeFinale = Risultati.Home(self.contaUSER, self.contaCPU, self.nome, self.COLORE)
         self.homeFinale.b2.Bind(wx.EVT_BUTTON, self.Restart)
         self.homeFinale.Show()
         return
-    
-    def PulisciCampo(self):
-        self.tabellone.S1.SetLabel("")
-        self.cCPU = ""
-        self.tabellone.S2.SetLabel("")
-        self.cUser = ""
-        self.tabellone.cartaUTENTE.SetLabel("")
-        self.tabellone.cartaCPU.SetLabel("")
-        return
-    
-    def Played(self,cartaUser,cartaCPU):  
-        #ritorna il vincitore del turno
-        importanza = [2,4,5,6,7,8,9,10,3,1]
-        if cartaUser[1] == cartaCPU[1]:
-            if importanza.index(cartaUser[0]) > importanza.index(cartaCPU[0]):
-                self.vincitoreTurno = self.nome
-            else:
-                self.vincitoreTurno = "CPU"
-        
-        elif self.briscolaSeme in [cartaUser[1], cartaCPU[1]]:
-            if cartaUser[1] == self.briscolaSeme:
-                self.vincitoreTurno = self.nome
-            else:
-                self.vincitoreTurno = "CPU"
-        else:
-            if self.turno:
-                self.vincitoreTurno = self.nome
-            else:
-                self.vincitoreTurno = "CPU"
-        
-        if self.vincitoreTurno == self.nome:
-            self.turno = True
-        else:
-            self.turno = False
-        return self.vincitoreTurno
     
     def Restart(self, evt):
         self.homeFinale.Destroy()

@@ -9,7 +9,7 @@ class SETTING(wx.Frame):
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
 
         st1 = wx.StaticText(self.panel, label="Background Colour:")
-        colori = ["brown", "dark green", "grey", "orange", "purple"]
+        colori = ["brown", "dark green", "grey", "orange", "purple", "dark grey"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
         self.COLORE = "dark green"
         
@@ -46,18 +46,10 @@ class SETTING(wx.Frame):
         
         self.BackType = {"Piacentine":"../carte/Retro1.jpg", "Yu-Gi-Oh":"../carte/Retro2.jpg"}
         
-        img = Image.open("../carte/Retro1.jpg")
-        img = img.resize((30,50))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
+        bitmap = self.ImpostaBitmap("../carte/Retro1.jpg", (30,50))
         bRetro1 = wx.BitmapButton(self.panel, bitmap = bitmap, id=1)
         
-        img = Image.open("../carte/Retro2.jpg")
-        img = img.resize((30,50))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
+        bitmap = self.ImpostaBitmap("../carte/Retro2.jpg", (30,50))
         bRetro2 = wx.BitmapButton(self.panel, bitmap = bitmap, id=2)
         
         hbox4.Add(self.st4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
@@ -70,11 +62,7 @@ class SETTING(wx.Frame):
         bRetro1.Bind(wx.EVT_BUTTON, self.getBackType)
         bRetro2.Bind(wx.EVT_BUTTON, self.getBackType)
         
-        img = Image.open("../carte/goback.png")
-        img = img.resize((75,50))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
+        bitmap = self.ImpostaBitmap("../carte/goback.png", (75,50))
         self.tornaIndietro = wx.BitmapButton(self.panel, bitmap = bitmap)
 
         vbox.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.EXPAND)
@@ -95,6 +83,14 @@ class SETTING(wx.Frame):
         else:
             self.retro = "Yu-Gi-Oh"
             self.st4.SetLabel("Back of cards: Yu-Gi-Oh!")
+    
+    def ImpostaBitmap(self, file, dim):
+        img = Image.open(file)
+        img = img.resize((dim))
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        return bitmap
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
