@@ -85,14 +85,25 @@ class Game:
         self.briscolaCarta = self.choiceBriscola()
         self.briscolaSeme = self.briscolaCarta[1]
         
-        #Imposto la mano della CPU
-        self.tabellone.C1.SetLabel(str(self.cpu[0][0]) + self.cpu[0][1])
-        self.tabellone.C2.SetLabel(str(self.cpu[1][0]) + self.cpu[1][1])
-        self.tabellone.C3.SetLabel(str(self.cpu[2][0]) + self.cpu[2][1])
+        #carta coperta (mano CPU)
+        img = Image.open(self.Setting.BackType[self.Setting.retro])
+        img = img.resize((150,250))
+        img2 = img.copy()
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        self.retro = wx.Bitmap(wx_Image)   
         
-        #Imposto la Briscola e il self.mazzo nel tabellone
+        #Imposto la mano della CPU
+        c = 0
+        for x in (self.tabellone.C1, self.tabellone.C2, self.tabellone.C3):
+            x.SetLabel(str(self.cpu[c][0]) + self.cpu[c][1])
+            x.SetBitmap(self.retro)
+            c+=1
+        
+        #Imposto la Briscola e il mazzo nel tabellone
         self.tabellone.S4.SetLabel(str(self.briscolaCarta[0]) + self.briscolaCarta[1])
         self.ImpostaBitmap(self.briscolaCarta, self.tabellone.S4)
+        self.tabellone.S5.SetBitmap(self.retro)
         
         #Imposto la mano dell'User
         c = 0
@@ -100,19 +111,6 @@ class Game:
             carta.SetLabel(str(self.user[c][0]) + self.user[c][1])
             self.ImpostaBitmap(self.user[c], carta)
             c += 1
-        
-        #carta coperta (mano CPU)
-        img = Image.open(self.Setting.BackType[self.Setting.retro])
-        img = img.resize((150,250))
-        img2 = img.copy()
-        wx_Image = wx.Image(img2.size[0], img2.size[1])
-        wx_Image.SetData(img2.convert("RGB").tobytes())
-        self.retro = wx.Bitmap(wx_Image)
-        
-        self.tabellone.C1.Bitmap = self.retro
-        self.tabellone.C2.Bitmap = self.retro
-        self.tabellone.C3.Bitmap = self.retro
-        self.tabellone.S5.Bitmap = self.retro
         return
     
     def choiceBriscola(self):
@@ -174,10 +172,14 @@ class Game:
         if self.countTurno != 0:
             vincitoreTurno = self.Played(self.cUser,self.cCPU)
             if vincitoreTurno == self.nome:
+                if len(self.contaUSER) == 0:
+                    self.tabellone.mazzoUtente.SetBitmap(self.retro)
                 self.contaUSER.append([self.cUser[0], self.cUser[1]])
                 self.contaUSER.append([self.cCPU[0], self.cCPU[1]])
                 self.tabellone.Count2.SetLabel(str((int(self.tabellone.Count2.GetLabel()) + 2)))
             else:
+                if len(self.contaCPU) == 0:
+                    self.tabellone.mazzoCPU.SetBitmap(self.retro)
                 self.contaCPU.append([self.cCPU[0], self.cCPU[1]])
                 self.contaCPU.append([self.cUser[0], self.cUser[1]])
                 self.tabellone.Count1.SetLabel(str((int(self.tabellone.Count1.GetLabel()) + 2)))

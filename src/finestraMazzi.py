@@ -5,12 +5,14 @@ class Home(wx.Frame):
     def __init__(self, utente, cpu, nome, colore):
         super().__init__(None, title="BRISCOLA | DECKs")
         panel = wx.Panel(self)
+        self.SetIcon(wx.Icon("../icone/briscola.ico"))
+        back = self.ImpostaBitmap("../carte/Tavolo.jpg", (800,700))
+        bmp = wx.StaticBitmap(panel, bitmap = wx.Bitmap(back))
+        
         
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         flex = wx.FlexGridSizer(rows = 2, cols = 2, vgap=5, hgap=5)
         name = wx.StaticText(panel, label = nome)
-        name.SetBackgroundColour("white")
-        name.SetForegroundColour("black")
         name.SetFont(font)
         hname = wx.BoxSizer(wx.HORIZONTAL)
         hname.Add(name, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL)
@@ -24,12 +26,8 @@ class Home(wx.Frame):
         for carta in utente:
             conta += 1
             front = "../carte/" + carta[1] + str(carta[0]) + ".jpg"
-            img = Image.open(front)
-            img = img.resize((50,100))
-            wx_Image = wx.Image(img.size[0], img.size[1])
-            wx_Image.SetData(img.convert("RGB").tobytes())
-            bitmap = wx.Bitmap(wx_Image)
-            bmp = wx.BitmapButton(panel, bitmap=bitmap)
+            bitmap = self.ImpostaBitmap(front, (50,100))
+            bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h1.Add(bmp, proportion=0, flag=wx.ALL, border=5)
             else:
@@ -46,8 +44,6 @@ class Home(wx.Frame):
         vbox.Add(h6, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         CPU = wx.StaticText(panel, label="CPU")
-        CPU.SetBackgroundColour("white")
-        CPU.SetForegroundColour("black")
         CPU.SetFont(font)
         hCPU = wx.BoxSizer(wx.HORIZONTAL)
         hCPU.Add(CPU, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
@@ -62,12 +58,8 @@ class Home(wx.Frame):
         for carta in cpu:
             conta += 1
             front = "../carte/" + carta[1] + str(carta[0]) + ".jpg"
-            img = Image.open(front)
-            img = img.resize((50,100))
-            wx_Image = wx.Image(img.size[0], img.size[1])
-            wx_Image.SetData(img.convert("RGB").tobytes())
-            bitmap = wx.Bitmap(wx_Image)
-            bmp = wx.BitmapButton(panel, bitmap=bitmap)
+            bitmap = self.ImpostaBitmap(front, (50,100))
+            bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h3.Add(bmp, proportion=0, flag=wx.ALL, border=5)
             else:
@@ -89,27 +81,29 @@ class Home(wx.Frame):
         flex.Add(vbox2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         flex.AddGrowableCol(1)
-        
-        self.SetBackgroundColour(colore)
 
         v = wx.BoxSizer(wx.VERTICAL)
         v.Add(flex, proportion=1, flag=wx.ALL, border=5)
         
-        img = Image.open("../carte/goback.png")
-        img = img.resize((75,50))
-        wx_Image = wx.Image(img.size[0], img.size[1])
-        wx_Image.SetData(img.convert("RGB").tobytes())
-        bitmap = wx.Bitmap(wx_Image)
-        self.button = wx.BitmapButton(panel, bitmap = bitmap)
-        v.Add(self.button, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=10)
+#         bitmap = self.ImpostaBitmap("../icone/goback.png", (75,50))
+#         self.button = wx.BitmapButton(panel, bitmap = bitmap)
+#         v.Add(self.button, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=10)
         
-        self.SetBackgroundColour(colore)
         panel.SetSizer(v)
         v.Fit(self)
         res = self.GetSize()
+        print(res)
         self.SetMinSize(res)
         self.SetMaxSize(res)
         self.Centre()
+    
+    def ImpostaBitmap(self, file, dim):
+        img = Image.open(file)
+        img = img.resize((dim)) #150x75 o 75x75
+        wx_Image = wx.Image(img.size[0], img.size[1])
+        wx_Image.SetData(img.convert("RGB").tobytes())
+        bitmap = wx.Bitmap(wx_Image)
+        return bitmap
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()

@@ -5,6 +5,8 @@ class Home(wx.Frame):
     def __init__(self, preseUTENTE, preseCPU, nome, colore):
         super().__init__(None, title="BRISCOLA | RESULTS")
         panel = wx.Panel(self)
+        self.SetIcon(wx.Icon("../icone/briscola.ico"))
+        self.SetBackgroundColour("dark grey")
         self.colore = colore
         self.contaBarra = 0
         self.timerBarra = wx.Timer()
@@ -20,14 +22,14 @@ class Home(wx.Frame):
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         vbox  = wx.BoxSizer(wx.VERTICAL)
         staticText = wx.StaticText(panel, label = "THANK YOU FOR\nHAVING PLAYED!")
-        staticText.SetForegroundColour("red")
+        staticText.SetForegroundColour("white")
         staticText.SetFont(font)
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(staticText, proportion=1, flag=wx.ALL, border=5)
         vbox.Add(hbox, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
 
         self.winner = wx.StaticText(panel, label = "Calculating scores, please wait ...")
-        self.winner.SetForegroundColour("dark grey")
+        self.winner.SetForegroundColour("light grey")
         font2 = wx.Font(13,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.winner.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -37,23 +39,26 @@ class Home(wx.Frame):
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         v = wx.StaticBoxSizer(wx.VERTICAL, panel, "SCORE")
         self.risultati = wx.StaticText(panel, label="CPU:\nYOU:")
+        self.risultati.SetForegroundColour("white")
         v.Add(self.risultati, proportion=1, flag=wx.ALL, border=5)
         
-        self.immagine = wx.StaticBitmap(panel, bitmap = wx.Bitmap())
+        self.immagine = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("../icone/loadingIcon.png", (125,100)), size=(200,75))
+        v2 = wx.BoxSizer(wx.VERTICAL)
+        v2.Add(self.immagine, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        hbox4.Add(v, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL , border=5)
-        hbox4.Add(self.immagine, proportion=1, flag=wx.ALL, border=5)
+        hbox4.Add(v, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
+        hbox4.Add(v2, proportion=0, flag=wx.ALL, border=5)
         vbox.Add(hbox4, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         self.barra = wx.Gauge(panel, range=25)
         vbox.Add(self.barra, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        bitmap = self.ImpostaBitmap("../carte/cardsIcon.png", (75,75))
+        bitmap = self.ImpostaBitmap("../icone/cardsIcon.png", (125,85))
         self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmap("../carte/restartIcon.png", (75,75))
+        bitmap = self.ImpostaBitmap("../icone/restartIcon.png", (125,70))
         self.b2 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmap("../carte/closeIcon.png", (75,75))
+        bitmap = self.ImpostaBitmap("../icone/closeIcon.png", (75,75))
         self.b3 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
         self.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
         self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)
@@ -61,13 +66,15 @@ class Home(wx.Frame):
         self.b2.Enable(False)
         self.b3.Enable(False)
         
+        er = wx.StaticBitmap(panel, bitmap=self.ImpostaBitmap("../icone/ER.png", (50,25)), pos=(360,310))
+        
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         panel.SetSizer(vbox)
-        self.SetMinSize((425,350))
-        self.SetMaxSize((425,350))
+        self.SetMinSize((425,375))
+        self.SetMaxSize((425,375))
         self.Centre()
         
     def Chiudi(self, evt):
@@ -89,14 +96,14 @@ class Home(wx.Frame):
             puntiUtente = self.contaPunti(self.contaUSER)
             puntiCpu = self.contaPunti(self.contaCPU)
             if puntiUtente > puntiCpu:
-                self.winner.SetLabel("Well Done! You are the winner!")
-                bitmap = self.ImpostaBitmap("../carte/winIcon.png", (150,75))
+                self.winner.SetLabel("Well Done! You are the winner!!!")
+                bitmap = self.ImpostaBitmap("../icone/winIcon2.png", (125,75))
             elif puntiUtente < puntiCpu:
-                self.winner.SetLabel("CPU is the winner! Try again ;)")
-                bitmap = self.ImpostaBitmap("../carte/loseIcon.png", (150,75))
+                self.winner.SetLabel("CPU has won the game! Try again ;)")
+                bitmap = self.ImpostaBitmap("../icone/loseIcon.png", (150,75))
             else:
-                self.winner.SetLabel("None has won... Try again!")
-                bitmap = self.ImpostaBitmap("../carte/drawIcon.jpg", (150,75))
+                self.winner.SetLabel("None has won the game, try again!")
+                bitmap = self.ImpostaBitmap("../icone/drawIcon.jpg", (150,75))
             self.immagine.SetBitmap(bitmap)
             self.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
             return
@@ -111,7 +118,7 @@ class Home(wx.Frame):
         self.Enable(False)
         self.finestra = finestraMazzi.Home(self.contaUSER, self.contaCPU, self.nome, self.colore)
         self.finestra.Show()
-        self.finestra.button.Bind(wx.EVT_BUTTON, self.closeMazzi)
+    #self.finestra.button.Bind(wx.EVT_BUTTON, self.closeMazzi)
         self.finestra.Bind(wx.EVT_CLOSE, self.closeMazzi)
         return
     
@@ -131,6 +138,6 @@ class Home(wx.Frame):
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
-    window = Home([[1, "Denari"]], [[2, "Coppe"]], "nome", "dark green")
+    window = Home([[2, "Denari"]], [[1, "Coppe"]], "nome", "dark green")
     window.Show()
     app.MainLoop()

@@ -5,6 +5,7 @@ class SETTING(wx.Frame):
     def __init__(self):
         super().__init__(None, title="BRISCOLA | SETTINGS")
         self.panel = wx.Panel(self)
+        self.SetIcon(wx.Icon("../icone/briscola.ico"))
         box = wx.BoxSizer(wx.VERTICAL)
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
 
@@ -62,7 +63,7 @@ class SETTING(wx.Frame):
         bRetro1.Bind(wx.EVT_BUTTON, self.getBackType)
         bRetro2.Bind(wx.EVT_BUTTON, self.getBackType)
         
-        bitmap = self.ImpostaBitmap("../carte/goback.png", (75,50))
+        bitmap = self.ImpostaBitmap("../icone/goback.png", (75,50))
         self.tornaIndietro = wx.BitmapButton(self.panel, bitmap = bitmap)
 
         vbox.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.EXPAND)
