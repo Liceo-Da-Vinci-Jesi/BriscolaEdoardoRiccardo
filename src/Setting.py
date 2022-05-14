@@ -20,9 +20,9 @@ class SETTING(wx.Frame):
         vbox.Add(hbox,proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         
         st2 = wx.StaticText(self.panel, label="Resolution:")
-        dim = ["FULLSCREEN", "1300x1000", "1000x1000"]
+        dim = ["FULLSCREEN", "1300x1050", "1050x1050"]
         self.dimensione = wx.ComboBox(self.panel, choices = dim, style = wx.CB_READONLY)
-        self.DIMENSIONE = "1000x1000"
+        self.DIMENSIONE = "1000x1050"
         
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox2.Add(st2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)

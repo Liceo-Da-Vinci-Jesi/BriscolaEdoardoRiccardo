@@ -13,7 +13,7 @@ class Tabellone(wx.Frame):
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
-        
+                
         #Descrizione Turno
         h = wx.BoxSizer(wx.HORIZONTAL)
         v1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "CARD CPU")
@@ -49,7 +49,7 @@ class Tabellone(wx.Frame):
         self.mazzoCPU = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(150,250))
         h.Add(hbox, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         h.Add(self.mazzoCPU, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
-        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         grid = wx.GridSizer(rows=1, cols=5, vgap=5, hgap=5)
         #S = linea centrale: 5 colonne (1° carta CPU, 2° carta User, 3° vuoto, 4° Briscola, 5° Mazzo)
@@ -105,15 +105,15 @@ class Tabellone(wx.Frame):
         self.mazzoUtente = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(150,250))
         h.Add(self.mazzoUtente, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         
-        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
-        self.res = (1000,1000)
+        vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        self.res = (1000,1050)
         self.SetBackgroundColour("dark green")
         
         self.Move((450,00))
         self.panel.SetSizer(vbox)
         vbox.Fit(self)
         return
-# ----------------------------------------
+            # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
     window = Tabellone()

@@ -79,6 +79,7 @@ class Home(wx.Frame):
         
     def Chiudi(self, evt):
         self.Close()
+        wx.Exit()
         return
     
     def caricaBarra(self, evt):

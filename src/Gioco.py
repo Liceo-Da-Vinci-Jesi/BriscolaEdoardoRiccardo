@@ -65,8 +65,11 @@ class Game:
         return
 
     def startGame(self):
+        self.tabellone.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.tabellone.SetMaxSize(self.tabellone.res)
         self.tabellone.SetMinSize(self.tabellone.res)
+        self.tabellone.mazzoCPU.SetBitmap(wx.Bitmap())
+        self.tabellone.mazzoUtente.SetBitmap(wx.Bitmap())
         #collego i pulsanti  giocabili dall'utente alla loro funzione
         for pulsante in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
             pulsante.Bind(wx.EVT_BUTTON, self.GiocataUSER)
@@ -282,9 +285,9 @@ class Game:
             self.tabellone.Maximize()
             res = self.tabellone.GetSize()
             self.tabellone.res = res
-        elif self.DIMENSIONE == "1300x1000":
+        elif self.DIMENSIONE == "1300x1050":
             self.tabellone.res = (1300, 1000)
-        elif self.DIMENSIONE == "1000x1000":
+        elif self.DIMENSIONE == "1050x1050":
             self.tabellone.res = (1000, 1000)
         return
     def getColour(self,evt):
@@ -321,6 +324,17 @@ class Game:
         self.homeFinale.Destroy()
         self.__init__()
         return
+    
+    def OnEraseBackground(self, evt):
+        dc = evt.GetDC()
+        print(dc)
+        if not dc:
+            dc = wx.ClientDC(self)
+            rect = self.GetUpdateRegion().GetBox()
+            dc.SetClippingRect(rect)
+        dc.Clear()
+        bmp = wx.Bitmap("../carte/Tavolo.jpg")
+        dc.DrawBitmap(bmp, 0, 0)
     
     def ImpostaBitmap(self, carta, button):
         img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")

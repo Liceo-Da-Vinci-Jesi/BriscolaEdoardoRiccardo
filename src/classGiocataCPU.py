@@ -29,11 +29,11 @@ class Giocata:
             #Ha giocato l'utente
             #Se gioca briscola
             if self.cUser[1] == self.briscolaSeme:
-                print("a")
+                #print("a")
                 #Se la CPU non ha briscola gioca + basso poss
                 if self.briscolaSeme not in self.semiCPU:
                     cartaCPU = self.GiocataLOW()
-                    print("b")
+                    #print("b")
                 #Se invece la ha 
                 else:
                     #e se è > di un 9 prova a prenderla, altrimenti gioca + basso poss
@@ -49,17 +49,17 @@ class Giocata:
                                 for carta in self.cpu:
                                     if self.importanza.index(cartaCPU[0]) > self.importanza.index(carta[0]) and self.importanza.index(carta[0]) < 6:
                                         cartaCPU = carta
-                            print("c")
+                            #print("c")
                         else:
                             lista = []
                             for carta in carteMaggiori:
                                 lista.append(self.importanza.index(carta[0]))
                             x = max(lista)
                             cartaCPU = [self.importanza[x], self.briscolaSeme]
-                            print("d")
+                            #print("d")
                     else:
                         cartaCPU = self.GiocataLOW()
-                        print("e")
+                        #print("e")
             elif self.importanza.index(self.cUser[0]) > 6 and self.briscolaSeme in self.semiCPU:
                 briscole = []
                 for carta in self.cpu:
@@ -68,10 +68,10 @@ class Giocata:
                 if len(briscole) > 0:
                     x = max(briscole)
                     cartaCPU = [self.importanza[x], self.briscolaSeme]
-                    print("f")
+                    #print("f")
                 else:
                     cartaCPU = self.GiocataLOW()
-                    print("g")
+                    #print("g")
             #se l'user gioca una carta e la cpu ha il suo stesso seme e vale di più la prende
             elif self.cUser[1] in self.semiCPU:
                 lista = []
@@ -82,17 +82,17 @@ class Giocata:
                 #se la CPU non può prendere la carta dell'utente, gioca il + basso poss
                 if len(lista) == 0:
                     cartaCPU = self.GiocataLOW()
-                    print("h")
+                    #print("h")
                 else:
                     maggiori = []
                     for carta in lista:
                         maggiori.append(self.importanza.index(carta[0]))
                     x = min(maggiori)
                     cartaCPU = [self.importanza[x], self.cUser[1]]
-                    print("i")
+                    #print("i")
             else:
                 cartaCPU = self.GiocataLOW()
-                print("l")
+                #print("l")
         return cartaCPU
         
     def GiocataLOW(self):
@@ -116,4 +116,4 @@ if __name__ == "__main__":
     #manoCPU, difficoltà, seme briscola, carta utente e vincitoreTurno
     #Prova
     classe = Giocata([[1, "Denari"],[3, "Coppe"],[10,"Bastoni"]], False, "Bastoni", [10, "Bastoni"], "UTENTE")
-    print(classe.Gioca())
+    #print(classe.Gioca())
