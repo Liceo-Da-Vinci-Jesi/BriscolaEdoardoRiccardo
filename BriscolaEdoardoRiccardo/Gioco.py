@@ -333,11 +333,11 @@ class Game:
             rect = self.GetUpdateRegion().GetBox()
             dc.SetClippingRect(rect)
         dc.Clear()
-        bmp = wx.Bitmap("../carte/Tavolo.jpg")
+        bmp = wx.Bitmap("carte/Tavolo.jpg")
         dc.DrawBitmap(bmp, 0, 0)
     
     def ImpostaBitmap(self, carta, button):
-        img = Image.open("../carte/" + carta[1] + str(carta[0]) + ".jpg")
+        img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
