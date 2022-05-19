@@ -78,7 +78,7 @@ class Home(wx.Frame):
         self.Centre()
         
     def pulsanteStart(self, evt):
-        if self.nome.GetValue() != "":
+        if self.nome.GetValue().replace(" ","") != "":
             self.b2.Enable(True)
         else:
             self.b2.Enable(False)

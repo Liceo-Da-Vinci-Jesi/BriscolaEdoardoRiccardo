@@ -327,7 +327,7 @@ class Game:
     
     def OnEraseBackground(self, evt):
         dc = evt.GetDC()
-        print(dc)
+        #print(dc)
         if not dc:
             dc = wx.ClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
