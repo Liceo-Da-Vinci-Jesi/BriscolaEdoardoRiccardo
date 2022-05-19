@@ -1,0 +1,1 @@
+pyinstaller -n briscola -w --clean --add-data<"carte/";"carte/"> --add-data<"icone/";"icone/"> Gioco.py

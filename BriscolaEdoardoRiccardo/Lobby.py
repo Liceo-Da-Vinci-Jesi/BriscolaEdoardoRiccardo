@@ -7,7 +7,7 @@ class Home(wx.Frame):
         super().__init__(None, title="BRISCOLA | HOME")
         panel = wx.Panel(self)
         
-        self.SetIcon(wx.Icon("../BriscolaEdoardoRiccardo/icone/briscola.ico"))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
         
         font = wx.Font(35,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         vbox  = wx.BoxSizer(wx.VERTICAL)
@@ -31,7 +31,7 @@ class Home(wx.Frame):
         font = wx.Font(8,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         powered.SetForegroundColour("white")
         powered.SetFont(font)
-        er = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/ER.png", (35,20)))
+        er = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/ER.png", (35,20)))
         hbox5.Add(powered, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=0)
         hbox5.Add(er, proportion=1, flag=wx.ALL, border=0)
         vbox.Add(hbox5, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
@@ -47,15 +47,15 @@ class Home(wx.Frame):
         self.nome.SetMaxLength(8)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/settingIcon.png", (100, 50))
+        bitmap = self.ImpostaBitmap("icone/settingIcon.png", (100, 50))
         self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size= (50,50))
         self.b1.SetBackgroundColour("white")
         
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/startIcon.png", (110,75))
+        bitmap = self.ImpostaBitmap("icone/startIcon.png", (110,75))
         self.b2 = wx.BitmapButton(panel, bitmap = bitmap, size=(100,50))
         self.b2.Enable(False)
         
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/RulesIcon.png", (100,50))
+        bitmap = self.ImpostaBitmap("icone/RulesIcon.png", (100,50))
         self.b3 = wx.BitmapButton(panel, bitmap = bitmap, size=(50,50))
         
         self.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
@@ -68,8 +68,8 @@ class Home(wx.Frame):
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
-        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/cards.png", (125,60)), pos=(-50,70))
-        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/cards2.png", (125,60)), pos=(310,70))
+        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/cards.png", (125,60)), pos=(-50,70))
+        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/cards2.png", (125,60)), pos=(310,70))
         
         self.SetBackgroundColour("dark grey")
         panel.SetSizer(vbox)
