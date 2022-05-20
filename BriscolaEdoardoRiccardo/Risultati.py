@@ -5,7 +5,7 @@ class Home(wx.Frame):
     def __init__(self, preseUTENTE, preseCPU, nome, colore):
         super().__init__(None, title="BRISCOLA | RESULTS")
         panel = wx.Panel(self)
-        self.SetIcon(wx.Icon("../BriscolaEdoardoRiccardo/icone/briscola.ico"))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
         self.SetBackgroundColour("dark grey")
         self.colore = colore
         self.contaBarra = 0
@@ -42,7 +42,7 @@ class Home(wx.Frame):
         self.risultati.SetForegroundColour("white")
         v.Add(self.risultati, proportion=1, flag=wx.ALL, border=5)
         
-        self.immagine = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/loadingIcon.png", (125,100)), size=(200,75))
+        self.immagine = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/loadingIcon.png", (125,100)), size=(200,75))
         v2 = wx.BoxSizer(wx.VERTICAL)
         v2.Add(self.immagine, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
@@ -54,11 +54,11 @@ class Home(wx.Frame):
         vbox.Add(self.barra, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/cardsIcon.png", (125,85))
+        bitmap = self.ImpostaBitmap("icone/cardsIcon.png", (125,85))
         self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/restartIcon.png", (125,70))
+        bitmap = self.ImpostaBitmap("icone/restartIcon.png", (125,70))
         self.b2 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/closeIcon.png", (75,75))
+        bitmap = self.ImpostaBitmap("icone/closeIcon.png", (75,75))
         self.b3 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
         self.b1.Bind(wx.EVT_BUTTON, self.openMazzi)
         self.b3.Bind(wx.EVT_BUTTON, self.Chiudi)
@@ -66,7 +66,7 @@ class Home(wx.Frame):
         self.b2.Enable(False)
         self.b3.Enable(False)
         
-        er = wx.StaticBitmap(panel, bitmap=self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/ER.png", (50,25)), pos=(360,310))
+        er = wx.StaticBitmap(panel, bitmap=self.ImpostaBitmap("icone/ER.png", (50,25)), pos=(360,310))
         
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -98,13 +98,13 @@ class Home(wx.Frame):
             puntiCpu = self.contaPunti(self.contaCPU)
             if puntiUtente > puntiCpu:
                 self.winner.SetLabel("Well Done! You are the winner!!!")
-                bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/winIcon2.png", (125,75))
+                bitmap = self.ImpostaBitmap("icone/winIcon2.png", (125,75))
             elif puntiUtente < puntiCpu:
                 self.winner.SetLabel("CPU has won the game! Try again ;)")
-                bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/loseIcon.png", (150,75))
+                bitmap = self.ImpostaBitmap("icone/loseIcon.png", (150,75))
             else:
                 self.winner.SetLabel("None has won the game, try again!")
-                bitmap = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/icone/drawIcon.jpg", (150,75))
+                bitmap = self.ImpostaBitmap("icone/drawIcon.jpg", (150,75))
             self.immagine.SetBitmap(bitmap)
             self.risultati.SetLabel("CPU: " + str(puntiCpu) + "\nYOU" + ": " + str(puntiUtente))
             return

@@ -5,8 +5,8 @@ class Home(wx.Frame):
     def __init__(self, utente, cpu, nome, colore):
         super().__init__(None, title="BRISCOLA | DECKs")
         panel = wx.Panel(self)
-        self.SetIcon(wx.Icon("../BriscolaEdoardoRiccardo/icone/briscola.ico"))
-        back = self.ImpostaBitmap("../BriscolaEdoardoRiccardo/carte/Tavolo.jpg", (800,700))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
+        back = self.ImpostaBitmap("carte/Tavolo.jpg", (800,700))
         bmp = wx.StaticBitmap(panel, bitmap = wx.Bitmap(back))
         
         
@@ -25,7 +25,7 @@ class Home(wx.Frame):
         conta = -1
         for carta in utente:
             conta += 1
-            front = "../BriscolaEdoardoRiccardo/carte/" + carta[1] + str(carta[0]) + ".jpg"
+            front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
             bitmap = self.ImpostaBitmap(front, (50,100))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
@@ -57,7 +57,7 @@ class Home(wx.Frame):
         conta = -1
         for carta in cpu:
             conta += 1
-            front = "../BriscolaEdoardoRiccardo/carte/" + carta[1] + str(carta[0]) + ".jpg"
+            front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
             bitmap = self.ImpostaBitmap(front, (50,100))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:

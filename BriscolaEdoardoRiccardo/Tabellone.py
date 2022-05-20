@@ -6,9 +6,9 @@ class Tabellone(wx.Frame):
         super().__init__(None, title="BRISCOLA | GAME")
         self.panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)        
-        self.SetIcon(wx.Icon("../BriscolaEdoardoRiccardo/icone/briscola.ico"))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
           
-        img = Image.open("../BriscolaEdoardoRiccardo/carte/Retro1.jpg")
+        img = Image.open("carte/Retro1.jpg")
         img = img.resize((150,250))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
