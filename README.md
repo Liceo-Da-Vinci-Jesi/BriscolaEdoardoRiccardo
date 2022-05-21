@@ -1,10 +1,9 @@
-# IL TUO NUOVO PROGETTO!
+# Briscola!
 
-Questo file serve per illustrare il contenuto del tuo progetto su Github.
-(probabilmente andrebbe scritto in inglese...)
+La Briscola è uno dei più diffusi giochi di carte in Italia e che ha dato origine a numerose varianti.
 
-Modificalo come vuoi! E' scritto in Markdown (estensione .md).
+Si gioca con un mazzo di 40 carte con i valori asso, 2, 3, 4, 5, 6, 7, fante, cavallo, re, di semi italiani o francesi. Si può giocare in due o in quattro, a coppie di due.
 
-Markdown è un linguaggo di rappresentazione delle informazioni molto intuitivo... quindi NON dovrebbe essere necessario
-studiare nulla. Ma se proprio sei uno studente secchione: 
-<a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github">Primi passi con Markdown in Github</a>
+![Briscola](briscola.png)
+
+Link di Wikipedia al [Gioco della Briscola](https://it.wikipedia.org/wiki/Briscola)
