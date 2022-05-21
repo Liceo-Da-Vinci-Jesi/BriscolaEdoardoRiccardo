@@ -1,5 +1,6 @@
 #classe che esegue la giocata del computer
 import random
+
 class Giocata:
     def __init__(self, mano, difficolta, briscola, cartaUtente, vincitoreTurno):
         self.difficolta = difficolta

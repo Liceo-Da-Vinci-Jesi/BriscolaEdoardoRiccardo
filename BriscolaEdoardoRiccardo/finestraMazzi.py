@@ -1,12 +1,18 @@
 import wx
 from PIL import Image
+
+# ---------------------------------
+import os
+module_dir = os.path.dirname(__file__)
+# ---------------------------------
+
 class Home(wx.Frame):
 
     def __init__(self, utente, cpu, nome, colore):
         super().__init__(None, title="BRISCOLA | DECKs")
         panel = wx.Panel(self)
-        self.SetIcon(wx.Icon("icone/briscola.ico"))
-        back = self.ImpostaBitmap("carte/Tavolo.jpg", (800,700))
+        self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
+        back = self.ImpostaBitmap( os.path.join(module_dir,"carte/Tavolo.jpg"), (800,700))
         bmp = wx.StaticBitmap(panel, bitmap = wx.Bitmap(back))
         
         
@@ -26,7 +32,7 @@ class Home(wx.Frame):
         for carta in utente:
             conta += 1
             front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
-            bitmap = self.ImpostaBitmap(front, (50,100))
+            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (50,100))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h1.Add(bmp, proportion=0, flag=wx.ALL, border=5)
@@ -58,7 +64,7 @@ class Home(wx.Frame):
         for carta in cpu:
             conta += 1
             front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
-            bitmap = self.ImpostaBitmap(front, (50,100))
+            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (50,100))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h3.Add(bmp, proportion=0, flag=wx.ALL, border=5)
@@ -104,6 +110,7 @@ class Home(wx.Frame):
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
         return bitmap
+
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()

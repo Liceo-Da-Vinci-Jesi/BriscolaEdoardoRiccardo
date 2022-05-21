@@ -1,11 +1,17 @@
 import wx
 from PIL import Image
+
+# ---------------------------------
+import os
+module_dir = os.path.dirname(__file__)
+# ---------------------------------
+
 class SETTING(wx.Frame):
 
     def __init__(self):
         super().__init__(None, title="BRISCOLA | SETTINGS")
         self.panel = wx.Panel(self)
-        self.SetIcon(wx.Icon("icone/briscola.ico"))
+        self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
         box = wx.BoxSizer(wx.VERTICAL)
         vbox = wx.StaticBoxSizer(wx.VERTICAL, self.panel,"SETTING")
 
@@ -45,12 +51,12 @@ class SETTING(wx.Frame):
         self.st4 = wx.StaticText(self.panel, label = "Back of cards: Piacentine")
         self.retro = "Piacentine"
         
-        self.BackType = {"Piacentine":"carte/Retro1.jpg", "Yu-Gi-Oh":"carte/Retro2.jpg"}
+        self.BackType = {"Piacentine":os.path.join(module_dir,"carte/Retro1.jpg"), "Yu-Gi-Oh":os.path.join(module_dir,"carte/Retro2.jpg") }
         
-        bitmap = self.ImpostaBitmap("carte/Retro1.jpg", (30,50))
+        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"carte/Retro1.jpg"), (30,50))
         bRetro1 = wx.BitmapButton(self.panel, bitmap = bitmap, id=1)
         
-        bitmap = self.ImpostaBitmap("carte/Retro2.jpg", (30,50))
+        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"carte/Retro2.jpg"), (30,50))
         bRetro2 = wx.BitmapButton(self.panel, bitmap = bitmap, id=2)
         
         hbox4.Add(self.st4, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
@@ -63,7 +69,7 @@ class SETTING(wx.Frame):
         bRetro1.Bind(wx.EVT_BUTTON, self.getBackType)
         bRetro2.Bind(wx.EVT_BUTTON, self.getBackType)
         
-        bitmap = self.ImpostaBitmap("icone/goback.png", (75,50))
+        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/goback.png"), (75,50))
         self.tornaIndietro = wx.BitmapButton(self.panel, bitmap = bitmap)
 
         vbox.Add(wx.StaticText(self.panel, label=""), proportion=1, flag=wx.EXPAND)
@@ -92,10 +98,10 @@ class SETTING(wx.Frame):
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
         return bitmap
+
 # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
     window = SETTING()
     window.Show()
     app.MainLoop()
-

@@ -1,14 +1,19 @@
 import wx
 from PIL import Image
 
+# ---------------------------------
+import os
+module_dir = os.path.dirname(__file__)
+# ---------------------------------
+
 class Tabellone(wx.Frame):
    def __init__(self):
         super().__init__(None, title="BRISCOLA | GAME")
         self.panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)        
-        self.SetIcon(wx.Icon("icone/briscola.ico"))
+        self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
           
-        img = Image.open("carte/Retro1.jpg")
+        img = Image.open( os.path.join(module_dir,"carte/Retro1.jpg") )
         img = img.resize((150,250))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
@@ -113,7 +118,9 @@ class Tabellone(wx.Frame):
         self.panel.SetSizer(vbox)
         vbox.Fit(self)
         return
-            # ----------------------------------------
+
+# ----------------------------------------
+
 if __name__ == "__main__":
     app = wx.App()
     window = Tabellone()

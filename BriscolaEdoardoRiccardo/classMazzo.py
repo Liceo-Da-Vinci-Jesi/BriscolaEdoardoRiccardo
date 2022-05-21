@@ -1,4 +1,5 @@
 import random
+
 class Mazzo:
     def __init__(self):
         self.mazzo = []

@@ -1,7 +1,17 @@
 #Edoardo Zingaretti | Riccardo Flavianelli
 #Briscola
-import random, classMazzo, Tabellone, wx, Lobby, Risultati, Setting, finestraMazzi, classGiocataCPU
+import random
+import wx
+
+import classMazzo, Tabellone, Lobby, Risultati, Setting, finestraMazzi, classGiocataCPU
+
 from PIL import Image
+
+# ---------------------------------
+import os
+module_dir = os.path.dirname(__file__)
+# ---------------------------------
+
 class Game:
     def __init__(self):
         self.mazzo = classMazzo.Mazzo().generaMazzo()
@@ -273,11 +283,12 @@ class Game:
             self.turno = False
         return self.vincitoreTurno
     
-#Ora le varie funzioni x le impostazioni
+    #Ora le varie funzioni x le impostazioni
     def openSetting(self, evt):
         self.lobby.Enable(False)
         self.Setting.Show()
         return
+    
     def getRes(self, evt):
         dim = self.dimensione.GetStringSelection()
         self.DIMENSIONE = dim
@@ -290,6 +301,7 @@ class Game:
         elif self.DIMENSIONE == "1050x1050":
             self.tabellone.res = (1000, 1000)
         return
+    
     def getColour(self,evt):
         colore = self.colore.GetStringSelection()
         self.COLORE = colore
@@ -297,6 +309,7 @@ class Game:
         self.tabellone.panel.SetBackgroundColour(self.COLORE)
         self.Setting.Refresh()
         return
+    
     def getDifficulty(self, evt):
         self.lobby.Enable(True)
         if self.Setting.random.GetValue():
@@ -307,6 +320,7 @@ class Game:
             self.lobby.st2.SetLabel("DIFFICULTY SELECTED: HARD")
         self.lobby.Enable(False)
         return
+    
     def backLobby(self, evt):
         self.Setting.Hide()
         self.lobby.Enable(True)
@@ -333,11 +347,11 @@ class Game:
             rect = self.GetUpdateRegion().GetBox()
             dc.SetClippingRect(rect)
         dc.Clear()
-        bmp = wx.Bitmap("carte/Tavolo.jpg")
+        bmp = wx.Bitmap( os.path.join(module_dir,"carte/Tavolo.jpg") )
         dc.DrawBitmap(bmp, 0, 0)
     
     def ImpostaBitmap(self, carta, button):
-        img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
+        img = Image.open( os.path.join(module_dir,"carte/" + carta[1] + str(carta[0]) + ".jpg"))
         img = img.resize((150,250))
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
@@ -345,6 +359,7 @@ class Game:
         button.Show()
         button.Bitmap = wx.Bitmap(wx_Image)
         return
+    
 if __name__ == "__main__":
     app = wx.App()
     a = Game()
