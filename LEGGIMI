@@ -1,25 +1,10 @@
-In questo file ho scritto un minimo di istruzioni per diventare "operativi" nel mondo dei "grandi" (programmatori).
+il file "crea_eseguibile.txt" contiene il codice che ho utilizzato per creare la cartella con l'eseguibile.
+Utilizza il modulo pypi chiamato "pyinstaller".
+Dove lo eseguite crea una cartella "build" (contiene la compilazione del codice, può essere cancellata alla fine) 
+e una cartella "dist" (che contiene la cartella con l'eseguibile creato).
 
-nel frattempo che rifletti sulla frase precedente... pensa anche se hai fatto le seguenti cose:
+Il file "InstallerSetupScript.iss" è stato creato con InnoSetup (https://jrsoftware.org/isinfo.php). Contiene le 
+istruzioni per creare l'installer per Windows, data la cartella "dist" creata prima.
 
-- aggiunto il tuo nome al file AUTHORS
-- scelto la licenza di pubblicazione del tuo codice (deve essere la stessa per TUTTI)
+Questo conclude il corso di Informatica del Quarto Anno ;)
 
-Fatte queste prime cose... dovrai "pubblicare" le tue modifiche su github. Sai fare?
-
-Ecco alcuni minimi suggerimenti per fare i primi passi con git/github:
-
-- (ri)leggi questo: https://github.com/Liceo-Da-Vinci-Jesi/github-starter-course
-
-- cerca su Internet: git & github for dummies :)
-
-
-Fatto tutto questo... non hai ancora scritto una riga di codice! 
-E' ora di cominciare :D
-
-In bocca al lupo!
-Il prof.
-
-PS: 
-se in mezzo a tutta questa "confusione" saprai trovare un minimo di stimolo e di divertimento... 
-sappi che io avrò già vinto! Se vuoi farmi stravincere... fammelo sapere :)
