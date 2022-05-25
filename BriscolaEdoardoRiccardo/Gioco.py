@@ -37,7 +37,7 @@ class Game:
         
         self.CONTA = 0
         self.turno = random.choice((True, False))
-        print(self.turno)
+        #print(self.turno)
     
         self.lobby = Lobby.Home()
         self.lobby.Show()
@@ -76,8 +76,8 @@ class Game:
 
     def startGame(self):
         self.tabellone.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
-        self.tabellone.SetMaxSize(self.tabellone.res)
-        self.tabellone.SetMinSize(self.tabellone.res)
+#         self.tabellone.SetMaxSize(self.tabellone.res)
+#         self.tabellone.SetMinSize(self.tabellone.res)
         self.tabellone.mazzoCPU.SetBitmap(wx.Bitmap())
         self.tabellone.mazzoUtente.SetBitmap(wx.Bitmap())
         #collego i pulsanti  giocabili dall'utente alla loro funzione
@@ -100,7 +100,7 @@ class Game:
         
         #carta coperta (mano CPU)
         img = Image.open(self.Setting.BackType[self.Setting.retro])
-        img = img.resize((150,250))
+        img = img.resize((self.tabellone.SizeX,self.tabellone.SizeY))
         img2 = img.copy()
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
@@ -283,25 +283,23 @@ class Game:
             self.turno = False
         return self.vincitoreTurno
     
-    #Ora le varie funzioni x le impostazioni
+#Ora le varie funzioni x le impostazioni
     def openSetting(self, evt):
         self.lobby.Enable(False)
         self.Setting.Show()
         return
-    
     def getRes(self, evt):
-        dim = self.dimensione.GetStringSelection()
-        self.DIMENSIONE = dim
-        if self.DIMENSIONE == "FULLSCREEN":
-            self.tabellone.Maximize()
-            res = self.tabellone.GetSize()
-            self.tabellone.res = res
-        elif self.DIMENSIONE == "1300x1050":
-            self.tabellone.res = (1300, 1000)
-        elif self.DIMENSIONE == "1050x1050":
-            self.tabellone.res = (1000, 1000)
+#         dim = self.dimensione.GetStringSelection()
+#         self.DIMENSIONE = dim
+#         if self.DIMENSIONE == "FULLSCREEN":
+#             self.tabellone.Maximize()
+#             res = self.tabellone.GetSize()
+#             self.tabellone.res = res
+#         elif self.DIMENSIONE == "1300x1050":
+#             self.tabellone.res = (1300, 1000)
+#         elif self.DIMENSIONE == "1050x1050":
+#             self.tabellone.res = (1000, 1000)
         return
-    
     def getColour(self,evt):
         colore = self.colore.GetStringSelection()
         self.COLORE = colore
@@ -309,7 +307,6 @@ class Game:
         self.tabellone.panel.SetBackgroundColour(self.COLORE)
         self.Setting.Refresh()
         return
-    
     def getDifficulty(self, evt):
         self.lobby.Enable(True)
         if self.Setting.random.GetValue():
@@ -320,7 +317,6 @@ class Game:
             self.lobby.st2.SetLabel("DIFFICULTY SELECTED: HARD")
         self.lobby.Enable(False)
         return
-    
     def backLobby(self, evt):
         self.Setting.Hide()
         self.lobby.Enable(True)
@@ -347,19 +343,18 @@ class Game:
             rect = self.GetUpdateRegion().GetBox()
             dc.SetClippingRect(rect)
         dc.Clear()
-        bmp = wx.Bitmap( os.path.join(module_dir,"carte/Tavolo.jpg") )
+        bmp = wx.Bitmap("carte/Tavolo.jpg")
         dc.DrawBitmap(bmp, 0, 0)
     
     def ImpostaBitmap(self, carta, button):
-        img = Image.open( os.path.join(module_dir,"carte/" + carta[1] + str(carta[0]) + ".jpg"))
-        img = img.resize((150,250))
+        img = Image.open("carte/" + carta[1] + str(carta[0]) + ".jpg")
+        img = img.resize((self.tabellone.SizeX,self.tabellone.SizeY)) #150 x 250
         img2 = img.copy()
         wx_Image = wx.Image(img2.size[0], img2.size[1])
         wx_Image.SetData(img2.convert("RGB").tobytes())
         button.Show()
         button.Bitmap = wx.Bitmap(wx_Image)
         return
-    
 if __name__ == "__main__":
     app = wx.App()
     a = Game()

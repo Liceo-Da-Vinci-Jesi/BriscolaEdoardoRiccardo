@@ -10,11 +10,20 @@ class Tabellone(wx.Frame):
    def __init__(self):
         super().__init__(None, title="BRISCOLA | GAME")
         self.panel = wx.Panel(self)
+        self.Maximize()
+        self.res = self.GetSize()
+        #print(self.res)
+        self.SetMinSize(self.res)
+        self.SetMaxSize(self.res)
+        
+        self.SizeX = int(self.res[0] / 12.8)
+        self.SizeY = int(self.res[1] / 4.16)
+
         vbox = wx.BoxSizer(wx.VERTICAL)        
-        self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
           
-        img = Image.open( os.path.join(module_dir,"carte/Retro1.jpg") )
-        img = img.resize((150,250))
+        img = Image.open("carte/Retro1.jpg")
+        img = img.resize((self.SizeX,self.SizeY))
         wx_Image = wx.Image(img.size[0], img.size[1])
         wx_Image.SetData(img.convert("RGB").tobytes())
         bitmap = wx.Bitmap(wx_Image)
@@ -51,7 +60,7 @@ class Tabellone(wx.Frame):
         hbox.Add(self.C2, proportion=1, flag=wx.ALL, border=5)
         hbox.Add(self.C3, proportion=1, flag=wx.ALL, border=5)
         
-        self.mazzoCPU = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(150,250))
+        self.mazzoCPU = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(self.SizeX,self.SizeY))
         h.Add(hbox, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         h.Add(self.mazzoCPU, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
@@ -66,22 +75,21 @@ class Tabellone(wx.Frame):
         self.S2.Hide()
         h = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "TAKEN")
         self.S3 = wx.StaticText(self.panel, label="")
-        self.Count1 = wx.Button(self.panel, label = "0")
-        font = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        self.Count1 = wx.StaticText(self.panel, label = "0")
+        font = wx.Font(17,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.Count1.SetFont(font)
         self.Count1.SetForegroundColour("white")
         self.Count1.SetBackgroundColour("black")
-        self.Count2 = wx.Button(self.panel, label = "0")
-        font = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        self.Count2 = wx.StaticText(self.panel, label = "0")
         self.Count2.SetFont(font)
         self.Count2.SetForegroundColour("black")
         self.Count2.SetBackgroundColour("white")
         
         h.Add(self.Count1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        self.turnWinner = wx.StaticText(self.panel, label="")
+        self.turnWinner = wx.StaticText(self.panel, label="Enjoy the game! ;)")
         self.turnWinner.SetForegroundColour("white")
-        self.turnWinner.SetFont(font)
-        h.Add(self.turnWinner, proportion=1, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
+        self.turnWinner.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
+        h.Add(self.turnWinner, proportion=0, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         h.Add(self.Count2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         self.S4 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "BRISCOLA")
         self.S5 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "MAZZO")
@@ -107,20 +115,16 @@ class Tabellone(wx.Frame):
         hbox2.Add(self.U3, proportion=1, flag=wx.ALL, border=5)
         h.Add(hbox2, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
-        self.mazzoUtente = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(150,250))
+        self.mazzoUtente = wx.StaticBitmap(self.panel, bitmap=bitmap, size=(self.SizeX,self.SizeY))
         h.Add(self.mazzoUtente, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
         
         vbox.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        self.res = (1000,1050)
         self.SetBackgroundColour("dark green")
         
-        self.Move((450,00))
         self.panel.SetSizer(vbox)
         vbox.Fit(self)
         return
-
-# ----------------------------------------
-
+            # ----------------------------------------
 if __name__ == "__main__":
     app = wx.App()
     window = Tabellone()

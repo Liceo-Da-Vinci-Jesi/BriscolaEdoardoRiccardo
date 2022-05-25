@@ -18,6 +18,7 @@ class SETTING(wx.Frame):
         st1 = wx.StaticText(self.panel, label="Background Colour:")
         colori = ["brown", "dark green", "grey", "orange", "purple", "dark grey"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
+        self.colore.SetValue("dark green")
         self.COLORE = "dark green"
         
         hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -26,8 +27,10 @@ class SETTING(wx.Frame):
         vbox.Add(hbox,proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         
         st2 = wx.StaticText(self.panel, label="Resolution:")
-        dim = ["FULLSCREEN", "1300x1050", "1050x1050"]
+        #dim = ["FULLSCREEN", "1300x1050", "1050x1050"]
+        dim = ["FULLSCREEN"]
         self.dimensione = wx.ComboBox(self.panel, choices = dim, style = wx.CB_READONLY)
+        self.dimensione.SetValue("FULLSCREEN")
         self.DIMENSIONE = "1000x1050"
         
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
