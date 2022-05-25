@@ -133,7 +133,7 @@ class Game:
             return briscola
     
     def GiocataUSER(self, evt):
-        if self.turno:
+        if self.turno and self.tabellone.cartaUTENTE.GetLabel() == "":
             puls = (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3)
             cartaClickata = puls[evt.GetId() - 4].GetLabel()
             for n in puls:

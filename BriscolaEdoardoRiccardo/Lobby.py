@@ -78,10 +78,13 @@ class Home(wx.Frame):
         
         self.SetBackgroundColour("dark grey")
         panel.SetSizer(vbox)
-        self.SetMinSize((400,260))
-        self.SetMaxSize((400,260))
+        self.Maximize()
+        self.res = self.GetSize()
+        self.SetMinSize((int(self.res[0] / 4.8), int(self.res[1] / 4)))
+        self.SetMaxSize((int(self.res[0] / 4.8), int(self.res[1] / 4)))
         self.Centre()
-        
+        return
+    
     def pulsanteStart(self, evt):
         if self.nome.GetValue().replace(" ","") != "":
             self.b2.Enable(True)
