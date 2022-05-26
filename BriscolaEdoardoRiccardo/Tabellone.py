@@ -16,8 +16,8 @@ class Tabellone(wx.Frame):
         self.SetMinSize(self.res)
         self.SetMaxSize(self.res)
         
-        self.SizeX = int(self.res[0] / 14.5)
-        self.SizeY = int(self.res[1] / 6)
+        self.SizeX = int(self.res[0] / 14.1)
+        self.SizeY = int(self.res[1] / 5.5)
 
         vbox = wx.BoxSizer(wx.VERTICAL)        
         self.SetIcon(wx.Icon("icone/briscola.ico"))
