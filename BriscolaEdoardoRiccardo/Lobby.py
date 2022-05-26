@@ -5,6 +5,8 @@ from PIL import Image
 import os
 module_dir = os.path.dirname(__file__)
 # ---------------------------------
+import wx, webbrowser
+from PIL import Image
 
 class Home(wx.Frame):
 
@@ -12,9 +14,9 @@ class Home(wx.Frame):
         super().__init__(None, title="BRISCOLA | HOME")
         panel = wx.Panel(self)
         
-        self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
+        self.SetIcon(wx.Icon("icone/briscola.ico"))
         
-        font = wx.Font(35,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        font = wx.Font(55,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         vbox  = wx.BoxSizer(wx.VERTICAL)
         staticText = wx.StaticText(panel, label = "WELCOME!")
         staticText.SetForegroundColour("white")
@@ -25,24 +27,25 @@ class Home(wx.Frame):
 
         self.st2 = wx.StaticText(panel, label = "DIFFICULTY SELECTED: RANDOM")
         self.st2.SetForegroundColour("light grey")
-        font2 = wx.Font(10,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        font2 = wx.Font(15,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         self.st2.SetFont(font2)
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox2.Add(self.st2, proportion=1, flag=wx.ALL, border=0)
-        vbox.Add(hbox2, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
+        vbox.Add(hbox2, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
         hbox5 = wx.BoxSizer(wx.HORIZONTAL)
         powered = wx.StaticText(panel, label="Powered By:") #307-200
-        font = wx.Font(8,wx.DEFAULT,wx.NORMAL,wx.BOLD)
+        font = wx.Font(12,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         powered.SetForegroundColour("white")
         powered.SetFont(font)
-        er = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/ER.png"), (35,20)))
+        er = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/ER.png", (50,35)))
         hbox5.Add(powered, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=0)
-        hbox5.Add(er, proportion=1, flag=wx.ALL, border=0)
-        vbox.Add(hbox5, proportion=0, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
+        hbox5.Add(er, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=0)
+        vbox.Add(hbox5, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         st3 = wx.StaticText(panel, label="Username:")
+        st3.SetFont(font)
         st3.SetForegroundColour("grey")
         self.nome = wx.TextCtrl(panel, style = wx.TE_PROCESS_ENTER | wx.TE_CENTRE)
         hbox4.Add(st3, proportion=1, flag=wx.ALL, border=5)
@@ -52,41 +55,38 @@ class Home(wx.Frame):
         self.nome.SetMaxLength(8)
         
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/settingIcon.png"), (100, 50))
-        self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size= (50,50))
+        bitmap = self.ImpostaBitmap("icone/settingIcon.png", (150, 100))
+        self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size= (150,100))
         self.b1.SetBackgroundColour("white")
         
-        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/startIcon.png"), (110,75))
-        self.b2 = wx.BitmapButton(panel, bitmap = bitmap, size=(100,50))
+        bitmap = self.ImpostaBitmap("icone/startIcon.png", (150,125))
+        self.b2 = wx.BitmapButton(panel, bitmap = bitmap, size=(150,75))
         self.b2.Enable(False)
         
-        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/rulesIcon.png"), (100,50))
-        self.b3 = wx.BitmapButton(panel, bitmap = bitmap, size=(50,50))
+        bitmap = self.ImpostaBitmap("icone/RulesIcon.png", (150,75))
+        self.b3 = wx.BitmapButton(panel, bitmap = bitmap, size=(150,75))
         
         self.b3.Bind(wx.EVT_BUTTON, self.openBrowser)
         
         for x in (self.b1, self.b2, self.b3):
             x.SetBackgroundColour("dark grey")
         
-        hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox3.Add(self.b1, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox3.Add(self.b2, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        hbox3.Add(self.b3, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         
-        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/cards.png"), (125,60)), pos=(-50,70))
-        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/cards2.png"), (125,60)), pos=(310,70))
+        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/cards.png", (200,130)), pos=(-60,150))
+        carte = wx.StaticBitmap(panel, bitmap = self.ImpostaBitmap("icone/cards2.png", (200,130)), pos=(500,150))
         
         self.SetBackgroundColour("dark grey")
         panel.SetSizer(vbox)
-        self.Maximize()
-        self.res = self.GetSize()
-        self.SetMinSize((int(self.res[0] / 4.8), int(self.res[1] / 4)))
-        self.SetMaxSize((int(self.res[0] / 4.8), int(self.res[1] / 4)))
+        self.SetMinSize((650,450))
+        self.SetMaxSize((650,450))
         self.Centre()
-        return
-    
+        
     def pulsanteStart(self, evt):
-        if self.nome.GetValue().replace(" ","") != "":
+        if self.nome.GetValue() != "":
             self.b2.Enable(True)
         else:
             self.b2.Enable(False)
@@ -110,3 +110,4 @@ if __name__ == "__main__":
     window = Home()
     window.Show()
     app.MainLoop()
+
