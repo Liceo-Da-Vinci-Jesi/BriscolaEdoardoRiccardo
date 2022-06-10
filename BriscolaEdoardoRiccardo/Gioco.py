@@ -83,7 +83,8 @@ class Game:
         #collego i pulsanti  giocabili dall'utente alla loro funzione
         for pulsante in (self.tabellone.U1, self.tabellone.U2, self.tabellone.U3):
             pulsante.Bind(wx.EVT_BUTTON, self.GiocataUSER)
-        
+        self.tabellone.S1.Hide()
+        self.tabellone.S2.Hide()
         self.nome = self.lobby.nome.GetValue()
         if self.turno:
             ordine = (self.user, self.cpu)

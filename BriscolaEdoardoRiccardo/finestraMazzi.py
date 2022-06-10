@@ -1,4 +1,4 @@
-import wx
+import wx, Tabellone
 from PIL import Image
 
 # ---------------------------------
@@ -12,9 +12,17 @@ class Home(wx.Frame):
         super().__init__(None, title="BRISCOLA | DECKs")
         panel = wx.Panel(self)
         self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
-        back = self.ImpostaBitmap( os.path.join(module_dir,"carte/Tavolo.jpg"), (800,700))
+        res = Tabellone.Tabellone().res
+        back = self.ImpostaBitmap( os.path.join(module_dir,"carte/Tavolo.jpg"), res)
         bmp = wx.StaticBitmap(panel, bitmap = wx.Bitmap(back))
-        
+
+        if res[0] >= 1600 and res[1] >= 1000:
+            self.SizeX = int(res[0] / 19.5)
+            self.SizeY = int(res[1] / 6.5)
+        else:
+            self.SizeX = int(res[0] / 15)
+            self.SizeY = int(res[1] / 6.2)
+        vbox = wx.BoxSizer(wx.VERTICAL)        
         
         font = wx.Font(20,wx.DEFAULT,wx.NORMAL,wx.BOLD)
         flex = wx.FlexGridSizer(rows = 2, cols = 2, vgap=5, hgap=5)
@@ -32,7 +40,7 @@ class Home(wx.Frame):
         for carta in utente:
             conta += 1
             front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
-            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (50,100))
+            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (self.SizeX,self.SizeY))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h1.Add(bmp, proportion=0, flag=wx.ALL, border=5)
@@ -64,7 +72,7 @@ class Home(wx.Frame):
         for carta in cpu:
             conta += 1
             front = "carte/" + carta[1] + str(carta[0]) + ".jpg"
-            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (50,100))
+            bitmap = self.ImpostaBitmap( os.path.join(module_dir,front), (self.SizeX,self.SizeY))
             bmp = wx.StaticBitmap(panel, bitmap=bitmap)
             if conta < 10:
                 h3.Add(bmp, proportion=0, flag=wx.ALL, border=5)

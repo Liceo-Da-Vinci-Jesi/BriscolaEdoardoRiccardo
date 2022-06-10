@@ -19,6 +19,7 @@ class SETTING(wx.Frame):
         colori = ["brown", "dark green", "grey", "orange", "purple", "dark grey"]
         self.colore = wx.ComboBox(self.panel, choices = colori, style = wx.CB_READONLY | wx.CB_SORT)
         self.colore.SetValue("dark green")
+        self.SetBackgroundColour("dark green")
         self.COLORE = "dark green"
         
         hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -80,9 +81,15 @@ class SETTING(wx.Frame):
         
         box.Add(vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
         
-        self.SetMinSize((400, 400))
-        self.SetMaxSize((400, 400))
         self.panel.SetSizer(box)
+        self.Maximize()
+        res = self.GetSize()
+        if res[0] >= 1600 and res[1] >= 1000:
+            self.SetMinSize((res[0] / 4.8, res[1] / 2.3))
+            self.SetMaxSize((res[0] / 4.8, res[1] / 2.3))
+        else:
+            self.SetMinSize((res[0] / 2.5, res[1] / 1.3 ))
+            self.SetMaxSize((res[0] /2.5, res[1] / 1.3 ))
         self.Centre()
         self.Move((400,150))
 

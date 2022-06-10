@@ -15,10 +15,12 @@ class Tabellone(wx.Frame):
         #print(self.res)
         self.SetMinSize(self.res)
         self.SetMaxSize(self.res)
-        
-        self.SizeX = int(self.res[0] / 12.8)
-        self.SizeY = int(self.res[1] / 4.16)
-
+        if self.res[0] >= 1600 and self.res[1] >= 1000:
+            self.SizeX = int(self.res[0] / 13)
+            self.SizeY = int(self.res[1] / 4.2)
+        else:
+            self.SizeX = int(self.res[0] / 15)
+            self.SizeY = int(self.res[1] / 5.7)
         vbox = wx.BoxSizer(wx.VERTICAL)        
         self.SetIcon(wx.Icon("icone/briscola.ico"))
           
@@ -68,42 +70,40 @@ class Tabellone(wx.Frame):
         grid = wx.GridSizer(rows=1, cols=5, vgap=5, hgap=5)
         #S = linea centrale: 5 colonne (1° carta CPU, 2° carta User, 3° vuoto, 4° Briscola, 5° Mazzo)
         #S1 = CARTA CPU
-        self.S1 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "")
-        self.S1.Hide()
+        self.S1 = wx.StaticBitmap(self.panel, bitmap=bitmap)
         #S2 = CARTA USER
-        self.S2 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "")
-        self.S2.Hide()
+        self.S2 = wx.StaticBitmap(self.panel, bitmap=bitmap)
+        
         h = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "TAKEN")
         self.S3 = wx.StaticText(self.panel, label="")
         self.Count1 = wx.StaticText(self.panel, label = "0")
         font = wx.Font(17,wx.DEFAULT,wx.NORMAL,wx.BOLD)
-        self.Count1.SetFont(font)
-        self.Count1.SetForegroundColour("white")
-        self.Count1.SetBackgroundColour("black")
         self.Count2 = wx.StaticText(self.panel, label = "0")
-        self.Count2.SetFont(font)
-        self.Count2.SetForegroundColour("black")
-        self.Count2.SetBackgroundColour("white")
-        
-        h.Add(self.Count1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        for x in (self.Count1, self.Count2):
+            x.SetFont(font)
+            x.SetForegroundColour("black")
+            x.SetBackgroundColour("white")
         self.turnWinner = wx.StaticText(self.panel, label="Enjoy the game! ;)")
         self.turnWinner.SetForegroundColour("white")
         self.turnWinner.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
+        h.Add(self.Count1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         h.Add(self.turnWinner, proportion=0, flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         h.Add(self.Count2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        self.S4 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "BRISCOLA")
-        self.S5 = wx.StaticBitmap(self.panel, bitmap=bitmap, name = "MAZZO")
+        
+        self.S4 = wx.StaticBitmap(self.panel, bitmap=bitmap)
+        self.S5 = wx.StaticBitmap(self.panel, bitmap=bitmap)
         
         h1 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "BRISCOLA")
         h1.Add(self.S4, proportion=1, flag=wx.ALL, border=5)
         h2 = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "DECK")
         h2.Add(self.S5, proportion=1, flag=wx.ALL, border=5)
-        grid.Add(h1, proportion=0, flag=wx.ALL, border=5)
-        grid.Add(self.S1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
+        
+        grid.Add(h1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        grid.Add(self.S1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         grid.Add(h, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
-        grid.Add(self.S2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border=5)
-        grid.Add(h2, proportion=0, flag=wx.ALL, border=5)
-        vbox.Add(grid, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        grid.Add(self.S2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        grid.Add(h2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
+        vbox.Add(grid, proportion=2, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         
         h = wx.BoxSizer(wx.HORIZONTAL)
         hbox2 = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "YOUR HAND")

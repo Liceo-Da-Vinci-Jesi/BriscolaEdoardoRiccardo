@@ -1,4 +1,4 @@
-import wx
+import wx, Tabellone
 from PIL import Image
 
 import finestraMazzi
@@ -14,6 +14,15 @@ class Home(wx.Frame):
         super().__init__(None, title="BRISCOLA | RESULTS")
         panel = wx.Panel(self)
         self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
+        res = Tabellone.Tabellone().res
+        print(res)
+        if res[0] >= 1200 and res[1] >= 950:
+            self.SetMinSize((res[0]/3.7,res[1]/2.4))
+            self.SetMaxSize((res[0]/3.7,res[1]/2.4))
+        else:
+            self.SetMinSize((res[0]/2,res[1]/1.1))
+            self.SetMaxSize((res[0]/2,res[1]/1.1))
+            
         self.SetBackgroundColour("dark grey")
         self.colore = colore
         self.contaBarra = 0
@@ -64,7 +73,7 @@ class Home(wx.Frame):
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
         bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/cardsIcon.png"), (125,85))
         self.b1 = wx.BitmapButton(panel, bitmap = bitmap, size=(75,75))
-        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/restartIcon.png"), (125,70))
+        bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/restartIcon.png"), (125,75))
         self.b2 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
         bitmap = self.ImpostaBitmap( os.path.join(module_dir,"icone/closeIcon.png"), (75,75))
         self.b3 = wx.BitmapButton(panel, bitmap=bitmap, size=(75,75))
@@ -74,15 +83,13 @@ class Home(wx.Frame):
         self.b2.Enable(False)
         self.b3.Enable(False)
         
-        er = wx.StaticBitmap(panel, bitmap=self.ImpostaBitmap( os.path.join(module_dir,"icone/ER.png"), (50,25)), pos=(360,310))
+        er = wx.StaticBitmap(panel, bitmap=self.ImpostaBitmap( os.path.join(module_dir,"icone/ER.png"), (50,25)))
         
         hbox3.Add(self.b1, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b2, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         hbox3.Add(self.b3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=5)
         vbox.Add(hbox3, proportion=1, flag=wx.ALL | wx.ALIGN_CENTRE, border=0)
         panel.SetSizer(vbox)
-        self.SetMinSize((425,375))
-        self.SetMaxSize((425,375))
         self.Centre()
         
     def Chiudi(self, evt):
