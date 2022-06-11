@@ -16,12 +16,15 @@ class Home(wx.Frame):
         self.SetIcon(wx.Icon( os.path.join(module_dir,"icone/briscola.ico") ))
         res = Tabellone.Tabellone().res
         print(res)
-        if res[0] >= 1200 and res[1] >= 950:
-            self.SetMinSize((res[0]/3.7,res[1]/2.4))
-            self.SetMaxSize((res[0]/3.7,res[1]/2.4))
-        else:
-            self.SetMinSize((res[0]/2,res[1]/1.1))
-            self.SetMaxSize((res[0]/2,res[1]/1.1))
+        if res[0] >= 1500 and res[1] >= 950:
+            self.SetMinSize((res[0]/3.7,res[1]/2.5))
+            self.SetMaxSize((res[0]/3.7,res[1]/2.5))
+        elif res[0] >= 950 and res[1] >= 700:
+            self.SetMinSize((res[0]/2.9,res[1]/1.9))
+            self.SetMaxSize((res[0]/2.9,res[1]/1.9))
+        else: #res minima (800x600)
+            self.SetMinSize((res[0]/2,res[1]/1.5))
+            self.SetMaxSize((res[0]/2,res[1]/1.5))
             
         self.SetBackgroundColour("dark grey")
         self.colore = colore
